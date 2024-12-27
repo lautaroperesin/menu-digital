@@ -23,7 +23,7 @@ export default function Admin() {
 
   return (
     <div>
-      <h1>Administrador</h1>
+       <h1>Panel de Administración</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -45,11 +45,12 @@ export default function Admin() {
         />
         <button type="submit">Agregar</button>
       </form>
+      <h2>Productos Cargados en la Base de Datos</h2>
       <ul>
         {products.map((product) => (
           <li key={product.id}>
-            <h2>{product.name}</h2>
-            <p>${product.price}</p>
+            <h2>{product.nombre}</h2>
+            <p>${product.precio}</p>
           </li>
         ))}
       </ul>
