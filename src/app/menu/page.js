@@ -5,25 +5,28 @@ import { useEffect, useState } from 'react';
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const response = await fetch('/api/productos');
-      const data = await response.json();
-      setProducts(data);
-      
-      // Extraer categorías únicas
-      const cats = [...new Set(data.map(p => p.categoria))];
-      setCategories(cats);
-    };
-
     fetchProducts();
+    fetchCategories();
   }, []);
 
-  const leakedProducts = selectedCategory === 'all'
-    ? products
-    : products.filter(p => p.categoria === selectedCategory);
+  const fetchProducts = async () => {
+    const response = await fetch('/api/productos');
+    const data = await response.json();
+    setProducts(data);
+  };
+
+  const fetchCategories = async () => {
+    const response = await fetch('/api/categorias');
+    const data = await response.json();
+    setCategories(data);
+  };
+
+  const leakedProducts = products.filter(product => 
+    categoryFilter === 'all' || product.categoria_id === parseInt(categoryFilter)
+  )
 
   return (
     <>
@@ -33,13 +36,13 @@ export default function Home() {
         {/* Filtro de categorías */}
         <div className="mb-6">
         <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
           className="p-2 border rounded"
         >
           <option value="all">Todas las categorías</option>
           {categories.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
+            <option key={cat.id} value={cat.id}>{cat.nombre}</option>
           ))}
         </select>
       </div>

@@ -1,8 +1,9 @@
+import { NextResponse } from 'next/server';
 import db from '../../../utils/db';
 
 export async function GET() {
   try {
-    const [productos] = await db.query('SELECT * FROM productos');
+    const [productos] = await db.query('SELECT p.*, c.nombre as categoria_nombre FROM productos p LEFT JOIN categorias c ON p.categoria_id = c.id ORDER BY p.nombre');
     return new Response(JSON.stringify(productos), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
@@ -33,7 +34,7 @@ export async function POST(request) {
       price,
       image,
       description,
-      category_id,
+      category_id
     ]);
     return new Response(
       JSON.stringify({ message: 'Producto agregado' }),
@@ -43,6 +44,39 @@ export async function POST(request) {
     return new Response(
       JSON.stringify({ error: 'Error al agregar el producto' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+}
+
+export async function PUT(request) {
+  try {
+    const data = await request.json();
+    
+    await db.query(
+      'UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, categoria_id = ?, imagen = ? WHERE id = ?',
+      [data.nombre, data.descripcion, data.precio, data.categoria_id, data.imagen, data.id]
+    );
+
+    return NextResponse.json({ message: 'Producto actualizado exitosamente' });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Error al actualizar producto' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request) {
+  try {
+    const { id } = await request.json();
+    
+    await db.query('DELETE FROM productos WHERE id = ?', [id]);
+
+    return NextResponse.json({ message: 'Producto eliminado exitosamente' });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Error al eliminar producto' },
+      { status: 500 }
     );
   }
 }
