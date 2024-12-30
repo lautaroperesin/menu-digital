@@ -3,52 +3,55 @@ import ProductCard from '@/components/ProductCard';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const [productos, setProductos] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
-    fetch('/api/productos')
-      .then((res) => res.json())
-      .then((data) => setProductos(data));
+    const fetchProducts = async () => {
+      const response = await fetch('/api/productos');
+      const data = await response.json();
+      setProducts(data);
+      
+      // Extraer categorías únicas
+      const cats = [...new Set(data.map(p => p.categoria))];
+      setCategories(cats);
+    };
+
+    fetchProducts();
   }, []);
+
+  const leakedProducts = selectedCategory === 'all'
+    ? products
+    : products.filter(p => p.categoria === selectedCategory);
 
   return (
     <>
-      <h1>"Descubre nuestra selección exclusiva de platillos, bebidas y especialidades, cuidadosamente elaboradas para ofrecerte una experiencia única."</h1>
-      <ul>
-      {productos.map((producto) => (
-        <li key={producto.id}>  
-          <ProductCard title={producto.nombre} price={producto.precio} description={producto.descripcion} category={producto.categoria} imageUrl={producto.imagen}/>
-        </li>
+      <div className="container mx-auto px-4">
+      <h1 className="text-3xl font-bold my-6">Nuestro Menú</h1>
+
+        {/* Filtro de categorías */}
+        <div className="mb-6">
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="p-2 border rounded"
+        >
+          <option value="all">Todas las categorías</option>
+          {categories.map(cat => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {leakedProducts.map((product) => (
+       <div key={product.id} className="border rounded-lg p-4 shadow">
+          <ProductCard title={product.nombre} price={product.precio} description={product.descripcion} category={product.categoria} imageUrl={product.imagen}/>
+        </div>
       ))}
-      </ul>
+      </div>
+    </div>
     </>
   );
 }
-
-
-
-
-
- /*  const [productos, setProductos] = useState([]);
-
-  useEffect(() => {
-    fetch('/api/productos')
-      .then((res) => res.json())
-      .then((data) => setProductos(data));
-  }, []);
-
-  return (
-    <div>
-      <h1>Menú</h1>
-      <ul>
-        {productos.map((producto) => (
-          <li key={producto.id}>
-            <img src={producto.imagen} alt={producto.nombre} />
-            <h2>{producto.nombre}</h2>
-            <p>{producto.descripcion}</p>
-            <p>${producto.precio}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  ); */

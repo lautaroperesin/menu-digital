@@ -19,7 +19,7 @@ export async function GET() {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, price, image } = body;
+    const { name, price, image, category_id, description } = body;
 
     if (!name || !price || !image) {
       return new Response(
@@ -28,10 +28,12 @@ export async function POST(request) {
       );
     }
 
-    await db.query('INSERT INTO productos (name, price, image) VALUES (?, ?, ?)', [
+    await db.query('INSERT INTO productos (nombre, precio, imagen, descripcion, categoria_id) VALUES (?, ?, ?, ?, ?)', [
       name,
       price,
       image,
+      description,
+      category_id,
     ]);
     return new Response(
       JSON.stringify({ message: 'Producto agregado' }),
