@@ -5,8 +5,8 @@ export default function Home() {
     <section className="home">
       <div className="presentation">
         <img
-          src="img/LOGO (2).png"
-          alt="Logo de la empresa"
+          src="/images/logo.png"
+          alt="Logo"
           className="logo-presentation animated-logo"
         />
         <h1>¡Bienvenidos a Nuestra Web!</h1>
@@ -15,6 +15,11 @@ export default function Home() {
           <button>Explorar</button>
         </Link>
       </div>
+
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      />
     </section>
   );
 }
