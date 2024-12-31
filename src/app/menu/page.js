@@ -49,7 +49,7 @@ export default function Home() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {leakedProducts.map((product) => (
-       <div key={product.id} className="border rounded-lg p-4 shadow">
+       <div key={product.id}>
           <ProductCard title={product.nombre} price={product.precio} description={product.descripcion} category={product.categoria} imageUrl={product.imagen}/>
         </div>
       ))}
