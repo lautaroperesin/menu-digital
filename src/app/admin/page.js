@@ -7,11 +7,12 @@ export default function Admin() {
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [newProduct, setNewProduct] = useState({
-    name: '',
-    description: '',
-    price: '', 
-    image: '',
-    category_id: ''
+    id: '',
+    nombre: '',
+    descripcion: '',
+    precio: '', 
+    imagen: '',
+    categoria_id: ''
   });
   const [editProduct, setEditProduct] = useState(null);
 
@@ -37,22 +38,24 @@ export default function Admin() {
     console.log("Editando producto: "+ product.nombre);
     console.log("ID del producto: " + product.id);
     setNewProduct({
-      name: product.nombre,
-      description: product.descripcion,
-      price: product.precio,
-      image: product.imagen,
-      category_id: product.categoria_id
+      id: product.id,
+      nombre: product.nombre,
+      descripcion: product.descripcion,
+      precio: product.precio,
+      imagen: product.imagen,
+      categoria_id: product.categoria_id
     });
   };
 
   const handleCancelEdit = () => {
     setEditProduct(null);
     setNewProduct({
-      name: '',
-      description: '',
-      price: '',
-      image: '',
-      category_id: ''
+      id: '',
+      nombre: '',
+      descripcion: '',
+      precio: '',
+      imagen: '',
+      categoria_id: ''
     });
   }
 
@@ -70,11 +73,15 @@ export default function Admin() {
       body: JSON.stringify(newProduct),
     });
 
+    console.log('Datos enviados al servidor:', newProduct);
+
     if (response.ok) {
       handleCancelEdit();
       fetchProducts();
-      console.log('Producto guardado exitosamente');
+      method === 'POST' ? console.log('Producto agregado exitosamente') : console.log('Producto editado exitosamente');
       console.log(newProduct);
+    } else {
+      console.log('Error al agregar producto:', await response.json());
     }
   };
 
@@ -115,8 +122,8 @@ export default function Admin() {
           <label className="block mb-2">Nombre:</label>
           <input
             type="text"
-            value={newProduct.name || ''}
-            onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
+            value={newProduct.nombre || ''}
+            onChange={(e) => setNewProduct({...newProduct, nombre: e.target.value})}
             className="w-full p-2 border rounded"
             required
           />
@@ -126,8 +133,8 @@ export default function Admin() {
           <label className="block mb-2">Descripción:</label>
           <input
             type="text"
-            value={newProduct.description || ''}
-            onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
+            value={newProduct.descripcion || ''}
+            onChange={(e) => setNewProduct({...newProduct, descripcion: e.target.value})}
             className="w-full p-2 border rounded"
             required
           />
@@ -137,8 +144,8 @@ export default function Admin() {
           <label className="block mb-2">Precio:</label>
           <input
             type="number"
-            value={newProduct.price || ''}
-            onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
+            value={newProduct.precio || ''}
+            onChange={(e) => setNewProduct({...newProduct, precio: e.target.value})}
             className="w-full p-2 border rounded"
             required
           />
@@ -147,8 +154,8 @@ export default function Admin() {
         <div className="mb-4">
           <label className="block mb-2">Categoría:</label>
           <select
-            value={newProduct.category_id || ''}
-            onChange={(e) => setNewProduct({...newProduct, category_id: e.target.value})}
+            value={newProduct.categoria_id || ''}
+            onChange={(e) => setNewProduct({...newProduct, categoria_id: e.target.value})}
             className="w-full p-2 border rounded"
             required
           >
@@ -165,8 +172,8 @@ export default function Admin() {
           <label className="block mb-2">Imagen:</label>
           <input
             type="text"
-            value={newProduct.image || ''}
-            onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
+            value={newProduct.imagen || ''}
+            onChange={(e) => setNewProduct({...newProduct, imagen: e.target.value})}
             className="w-full p-2 border rounded"
             required
           />

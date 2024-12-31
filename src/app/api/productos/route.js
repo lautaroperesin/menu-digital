@@ -20,9 +20,11 @@ export async function GET() {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { name, price, image, category_id, description } = body;
+    const { nombre, precio, imagen, categoria_id, descripcion } = body;
+    
+    console.log('Datos recibidos:', body);
 
-    if (!name || !price || !image) {
+    if (!nombre || !precio || !imagen || !categoria_id || !descripcion) {
       return new Response(
         JSON.stringify({ error: 'Todos los campos son obligatorios' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
@@ -30,11 +32,11 @@ export async function POST(request) {
     }
 
     await db.query('INSERT INTO productos (nombre, precio, imagen, descripcion, categoria_id) VALUES (?, ?, ?, ?, ?)', [
-      name,
-      price,
-      image,
-      description,
-      category_id
+      nombre,
+      precio,
+      imagen,
+      descripcion,
+      categoria_id
     ]);
     return new Response(
       JSON.stringify({ message: 'Producto agregado' }),
@@ -51,14 +53,23 @@ export async function POST(request) {
 export async function PUT(request) {
   try {
     const data = await request.json();
-    
-    await db.query(
+    console.log('Datos recibidos en el servidor:', data);
+
+    const result = await db.query(
       'UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, categoria_id = ?, imagen = ? WHERE id = ?',
       [data.nombre, data.descripcion, data.precio, data.categoria_id, data.imagen, data.id]
     );
 
+    if ((result.affectedRows || result.rowCount) === 0) {
+      return NextResponse.json(
+        { message: 'No se encontró ningún producto con ese ID' },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json({ message: 'Producto actualizado exitosamente' });
   } catch (error) {
+    console.error('Error al actualizar producto:', error);
     return NextResponse.json(
       { error: 'Error al actualizar producto' },
       { status: 500 }
