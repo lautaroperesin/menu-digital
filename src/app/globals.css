@@ -350,3 +350,298 @@ iframe {
     transform: translateY(-5px);
   }
 }
+
+
+/*PRODUCTO CARD*/
+/* Contenedor principal centrado */
+.card-wrapper {
+  display: flex;
+  justify-content: center; /* Centrado horizontal */
+  align-items: center; /* Centrado vertical */
+  min-height: 100vh; /* Ocupa la altura de la pantalla */
+  padding: 1rem;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  box-sizing: border-box;
+}
+
+/* Tarjeta principal */
+.w-72 {
+  width: 90%;
+  max-width: 20rem;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #ffffff, #f3f3f3);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 5px 5px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  transform: translateY(-10px);
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s;
+}
+
+/* Fondo decorativo detrás */
+.w-72::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 160%;
+  height: 160%;
+  background: radial-gradient(circle, rgba(255, 209, 102, 0.5), rgba(255, 148, 92, 0.2), transparent);
+  filter: blur(40px);
+  opacity: 0.7;
+  z-index: -1;
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+/* Hover: Elevación */
+.w-72:hover {
+  transform: translateY(-20px);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2), 0 8px 10px rgba(0, 0, 0, 0.1);
+}
+
+.w-72:hover::before {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* Imagen */
+.h-48 {
+  height: 12rem;
+  object-fit: cover;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 80px;
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.h-48:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* Contenido */
+.p-4 {
+  padding: 1rem;
+}
+
+/* Título */
+.font-semibold.text-lg {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  background: linear-gradient(90deg, #000000, #000000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGlow 2s infinite alternate;
+}
+
+/* Categoría */
+.flex.justify-between.items-start.mb-2 p {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4b5563;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Descripción */
+.text-sm.text-gray-600.mb-2 {
+  color: #374151;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* Precio */
+.text-xl.font-bold.text-yellow-600 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #d97706;
+  text-align: center;
+  background: linear-gradient(90deg, #ffae00, #ffae00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: priceGlow 1.5s infinite alternate;
+}
+
+/* Animación para el texto del título */
+@keyframes textGlow {
+  from {
+    text-shadow: 0 0 10px rgba(255, 138, 0, 0.6), 0 0 20px rgba(255, 46, 113, 0.4);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(255, 138, 0, 0.8), 0 0 30px rgba(255, 46, 113, 0.6);
+  }
+}
+
+/* Animación para el precio */
+@keyframes priceGlow {
+  from {
+    text-shadow: 0 0 8px rgba(217, 119, 6, 0.5), 0 0 16px rgba(255, 215, 0, 0.4);
+  }
+  to {
+    text-shadow: 0 0 16px rgba(217, 119, 6, 0.8), 0 0 24px rgba(255, 215, 0, 0.6);
+  }
+}
+
+
+/*----PANEL ADMINISTRATIVO---*/
+
+/* Personalización adicional */
+.container {
+  background-color: #f9fafb; /* Fondo suave */
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+/* Formulario */
+form {
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+form:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+form h2 {
+  border-bottom: 2px solid #3b82f6;
+  padding-bottom: 0.5rem;
+}
+
+form input,
+form select {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  background-color: #f9fafb;
+}
+
+form button {
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+form button:hover {
+  transform: scale(1.05);
+}
+
+/* Tabla */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead th {
+  background-color: #3b82f6;
+  color: #ffffff;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 1rem;
+}
+
+tbody tr:hover {
+  background-color: #e2e8f0;
+  transition: background-color 0.2s ease;
+}
+
+tbody td {
+  padding: 1rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+tbody td button {
+  transition: color 0.2s ease;
+}
+
+tbody td button:hover {
+  font-weight: bold;
+}
+
+/* Inputs y filtros */
+input[type='text'] {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+input[type='text']:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  border-color: #3b82f6;
+}
+
+/* Selects */
+select {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+select:focus {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+/* Botones */
+button {
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+}
+
+button.bg-blue-500:hover {
+  background-color: #2563eb;
+}
+
+button.bg-gray-500:hover {
+  background-color: #4b5563;
+}
+
+
+
+/*-----------FOOTER-------------*/
+/*-----------FOOTER-------------*/
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  min-height: 115vh; /* Asegura que la página ocupe todo el alto de la pantalla */
+}
+
+.presentation {
+  flex: 1; /* Esto hace que la sección de presentación ocupe el espacio disponible */
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #333;
+  color: white;
+  margin-top: auto; /* Esto empuja el footer hacia abajo */
+}
+
+.footer .social-icons {
+  margin-top: 10px;
+}
+
+.footer .social-icons a {
+  color: white;
+  margin: 0 10px;
+  font-size: 24px;
+}
+
+.footer .social-icons a:hover {
+  color: #ccc;
+}
