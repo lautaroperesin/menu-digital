@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 export default function Admin() {
   const [products, setProducts] = useState([]);
@@ -15,6 +16,8 @@ export default function Admin() {
     categoria_id: ''
   });
   const [editProduct, setEditProduct] = useState(null);
+  const [imagenPreview, setImagenPreview] = useState(null);
+  const [subiendoImagen, setSubiendoImagen] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -108,6 +111,39 @@ export default function Admin() {
     product.nombre.toLowerCase().includes(search.toLowerCase())
   );
 
+  const handleImagenChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Mostrar preview
+    setImagenPreview(URL.createObjectURL(file));
+    setSubiendoImagen(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setNewProduct(prev => ({
+          ...prev,
+          imagen: data.url
+        }));
+      } else {
+        alert('Error al subir la imagen');
+      }
+    } catch (error) {
+      alert('Error al subir la imagen');
+    } finally {
+      setSubiendoImagen(false);
+    }
+  };
+
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-3xl font-bold my-6">Panel de Administración</h1>
@@ -170,13 +206,31 @@ export default function Admin() {
 
         <div className="mb-4">
           <label className="block mb-2">Imagen:</label>
-          <input
-            type="text"
-            value={newProduct.imagen || ''}
-            onChange={(e) => setNewProduct({...newProduct, imagen: e.target.value})}
-            className="w-full p-2 border rounded"
-            required
-          />
+          <div className="flex flex-col gap-2">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImagenChange}
+              className="w-full p-2 border rounded"
+            />
+            
+            {subiendoImagen && (
+              <div className="text-blue-500">
+                Subiendo imagen...
+              </div>
+            )}
+
+            {(imagenPreview || newProduct.imagen) && (
+              <div className="relative w-full h-48">
+                <Image
+                  src={imagenPreview || newProduct.imagen}
+                  alt="Preview"
+                  fill
+                  className="object-cover rounded"
+                />
+              </div>
+            )}
+          </div>
         </div>
         
         <div className="flex gap-2">
@@ -232,6 +286,7 @@ export default function Admin() {
         <table className="w-full border-collapse">
           <thead className="bg-gray-50">
             <tr>
+              <th className="border-b p-4 text-left">Imagen</th>
               <th className="border-b p-4 text-left">Nombre</th>
               <th className="border-b p-4 text-left">Descripción</th>
               <th className="border-b p-4 text-left">Precio</th>
@@ -242,6 +297,18 @@ export default function Admin() {
           <tbody>
             {leakedProducts.map(product => (
               <tr key={product.id} className="hover:bg-gray-50">
+                 <td className="border-b p-4">
+                  {product.imagen && (
+                    <div className="relative w-20 h-20">
+                      <Image
+                        src={product.imagen}
+                        alt={product.nombre}
+                        fill
+                        className="object-cover rounded"
+                      />
+                    </div>
+                  )}
+                </td>
                 <td className="border-b p-4">{product.nombre}</td>
                 <td className="border-b p-4">{product.descripcion}</td>
                 <td className="border-b p-4">${product.precio}</td>
