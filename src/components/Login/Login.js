@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../utils/firebaseConfig";
+import "./Login.css";
 
 const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState("");
@@ -18,9 +19,10 @@ const Login = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div>
-      <h2>Iniciar Sesión</h2>
-      <form onSubmit={handleLogin}>
+    <div className="login-container">
+    <div className="login-box">
+      <h2 className="login-title">Iniciar Sesión</h2>
+      <form onSubmit={handleLogin} className="form-login">
         <input
           type="email"
           placeholder="Correo electrónico"
@@ -35,10 +37,13 @@ const Login = ({ onLoginSuccess }) => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Iniciar Sesión</button>
+        <button type="submit" className="btn-login">
+          Iniciar Sesión
+        </button>
       </form>
-      {error && <p>{error}</p>}
+      {error && <p className="error">{error}</p>}
     </div>
+  </div>
   );
 };
 

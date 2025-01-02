@@ -168,7 +168,7 @@ export default function Admin() {
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-3xl font-bold my-6">Panel de Administración</h1>
-      <button onClick={handleLogout}>Cerrar Sesión</button>
+      <button onClick={handleLogout} className='p-3 mb-4 bg-red-600 rounded-full hover:bg-red-800'>Cerrar Sesión</button>
 
       {/* Formulario de nuevo producto */}
       <form onSubmit={handleSubmit} className="max-w-lg mb-8 bg-white p-6 rounded-lg shadow">
