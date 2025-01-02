@@ -13,8 +13,11 @@ export default function Home() {
         <h1>¡Bienvenidos a Nuestra Web!</h1>
         <p>Descubrí todas las opciones que tenemos para vos.</p>
         <Link href="/menu">
-          <button>Explorar</button>
+        <p><button>EXPLORAR</button></p>
         </Link>
+        <p><button>COMIDA</button></p>
+        <p><button>BEBIDAS</button></p>
+        <p><button>POSTRES</button></p>
       </div>
 
       {/* Footer */}
