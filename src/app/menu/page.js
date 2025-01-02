@@ -7,7 +7,7 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState(''); 
-  const [cart, setCart] = useState([]); // Estado del carrito
+  const [cart, setCart] = useState([]); // Estado de Favoritos
 
   useEffect(() => {
     fetchProducts();
@@ -40,7 +40,7 @@ export default function Home() {
   return (
     <>
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold my-6">Nuestro Menú</h1>
+        <h1 className="text-3xl font-bold my-6">NUESTRO MENÚ</h1>
 
         {/* Barra de búsqueda */}
         <div className="mb-4">
@@ -83,7 +83,7 @@ export default function Home() {
                 onClick={() => addToCart(product)}
                 className="bg-blue-500 text-white p-0.5 rounded mt-0"
               >
-                Añadir a favoritos
+                Añadir a Favoritos
               </button>
             </div>
           ))}
@@ -91,7 +91,7 @@ export default function Home() {
 
         {/* Resumen del carrito */}
         <div className="mt-8 border-t pt-4">
-          <h2 className="text-2xl font-bold mb-4">Favoritos</h2>
+          <h2 className="text-2xl font-bold mb-4">FAVORITOS</h2>
           {cart.length === 0 ? (
             <p className="text-gray-500">Su lista está vacía</p>
           ) : (
@@ -121,3 +121,4 @@ export default function Home() {
     </>
   );
 }
+
