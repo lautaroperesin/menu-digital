@@ -1,6 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from '../../utils/firebaseConfig';
+import Login from '../../components/Login/Login';
 
 export default function Admin() {
   const [products, setProducts] = useState([]);
@@ -19,10 +22,24 @@ export default function Admin() {
   const [imagenPreview, setImagenPreview] = useState(null);
   const [subiendoImagen, setSubiendoImagen] = useState(false);
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthenticated(true);
+        fetchProducts();
+        fetchCategories();
+      } else {
+        setIsAuthenticated(false);
+      }
+    });
+    return unsubscribe;
   }, []);
+
+  const handleLogout = () => {
+    signOut(auth);
+  };
 
   const fetchProducts = async () => {
     const response = await fetch('/api/productos');
@@ -144,9 +161,14 @@ export default function Admin() {
     }
   };
 
+  if (!isAuthenticated) {
+    return <Login onLoginSuccess={() => setIsAuthenticated(true)} />;
+  }
+
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-3xl font-bold my-6">Panel de Administración</h1>
+      <button onClick={handleLogout}>Cerrar Sesión</button>
 
       {/* Formulario de nuevo producto */}
       <form onSubmit={handleSubmit} className="max-w-lg mb-8 bg-white p-6 rounded-lg shadow">

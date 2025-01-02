@@ -1,5 +1,5 @@
 'use client';
-import ProductCard from '@/components/ProductCard';
+import ProductCard from '@/components/ProductCard/ProductCard';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
