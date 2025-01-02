@@ -6,7 +6,8 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const [searchQuery, setSearchQuery] = useState(''); // Nuevo estado para búsqueda
+  const [searchQuery, setSearchQuery] = useState(''); 
+  const [cart, setCart] = useState([]); // Estado del carrito
 
   useEffect(() => {
     fetchProducts();
@@ -30,6 +31,11 @@ export default function Home() {
     (product.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
      product.descripcion.toLowerCase().includes(searchQuery.toLowerCase())) // Filtrado por búsqueda
   );
+
+  // Función para agregar mis productos favoritos
+  const addToCart = (product) => {
+    setCart([...cart, product]);
+  };
 
   return (
     <>
@@ -61,6 +67,7 @@ export default function Home() {
           </select>
         </div>
 
+        {/* Productos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProducts.map((product) => (
             <div key={product.id}>
@@ -71,9 +78,41 @@ export default function Home() {
                 category={product.categoria}
                 imageUrl={product.imagen}
               />
+              {/* Botón para agregar al carrito */}
+              <button
+                onClick={() => addToCart(product)}
+                className="bg-blue-500 text-white p-0.5 rounded mt-0"
+              >
+                Añadir a favoritos
+              </button>
             </div>
           ))}
         </div>
+
+        {/* Resumen del carrito */}
+        <div className="mt-8 border-t pt-4">
+          <h2 className="text-2xl font-bold mb-4">Favoritos</h2>
+          {cart.length === 0 ? (
+            <p className="text-gray-500">Su lista está vacía</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {cart.map((item, index) => (
+                <div
+                  key={index}
+                  className="bg-white border rounded shadow-md p-4 flex flex-col items-center text-center"
+                >
+                  <img
+                    src={item.imagen}
+                    alt={item.nombre}
+                    className="w-20 h-20 object-cover rounded-full mb-4"
+                  />
+                  <span className="font-semibold">{item.nombre}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
       </div>
     </>
   );

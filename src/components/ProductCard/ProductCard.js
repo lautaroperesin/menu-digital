@@ -1,6 +1,6 @@
 export default function ProductCard( {title, price, description, category, imageUrl = "/api/placeholder/400/300"}){ 
         return (
-            <div className="w-72 overflow-hidden">
+            <div className="contenedor-carta overflow-hidden">
               <div className="p-0">
                 <img
                   src={imageUrl}
