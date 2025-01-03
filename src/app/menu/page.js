@@ -7,8 +7,8 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [cart, setCart] = useState([]); // Estado de Favoritos
-  const [totalPrice, setTotalPrice] = useState(0); // Estado para el total de precios
+  const [cart, setCart] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     fetchProducts();
@@ -27,29 +27,47 @@ export default function Home() {
     setCategories(data);
   };
 
-  const filteredProducts = products.filter(product =>
-    (categoryFilter === 'all' || product.categoria_id === parseInt(categoryFilter)) &&
-    (product.nombre.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredProducts = products.filter(
+    (product) =>
+      (categoryFilter === 'all' || product.categoria_id === parseInt(categoryFilter)) &&
+      product.nombre.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const addToCart = (product, quantity) => {
-    const existingProduct = cart.find(item => item.id === product.id);
+  // Función para añadir al carrito o actualizar la cantidad
+  const addToCart = (product, cantidad) => {
+    const existingProductIndex = cart.findIndex((item) => item.id === product.id);
 
-    if (existingProduct) {
-      // Si el producto ya está en el carrito, actualizamos la cantidad
-      const updatedCart = cart.map(item =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + quantity }
-          : item
-      );
+    if (existingProductIndex !== -1) {
+      const updatedCart = [...cart];
+      updatedCart[existingProductIndex].cantidad += cantidad;
       setCart(updatedCart);
     } else {
-      // Si el producto no está en el carrito, lo agregamos
-      setCart([...cart, { ...product, quantity }]);
+      setCart([...cart, { ...product, cantidad }]);
     }
 
-    // Actualizamos el precio total
-    setTotalPrice(prevTotal => prevTotal + product.precio * quantity);
+    setTotalPrice((prevTotal) => prevTotal + product.precio * cantidad);
+  };
+
+  // Función para eliminar un producto del carrito
+  const removeFromCart = (productId) => {
+    const updatedCart = cart.filter((item) => item.id !== productId);
+    const productToRemove = cart.find((item) => item.id === productId);
+
+    setTotalPrice((prevTotal) => prevTotal - productToRemove.precio * productToRemove.cantidad);
+    setCart(updatedCart);
+  };
+
+  // Función para cambiar la cantidad de un producto en el carrito
+  const updateQuantity = (productId, nuevaCantidad) => {
+    const updatedCart = cart.map((item) => {
+      if (item.id === productId) {
+        const diferenciaCantidad = nuevaCantidad - item.cantidad;
+        setTotalPrice((prevTotal) => prevTotal + item.precio * diferenciaCantidad);
+        return { ...item, cantidad: nuevaCantidad };
+      }
+      return item;
+    });
+    setCart(updatedCart);
   };
 
   return (
@@ -76,8 +94,10 @@ export default function Home() {
             className="p-2 border rounded"
           >
             <option value="all">Todas las categorías</option>
-            {categories.map(cat => (
-              <option key={cat.id} value={cat.id}>{cat.nombre}</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.nombre}
+              </option>
             ))}
           </select>
         </div>
@@ -93,26 +113,29 @@ export default function Home() {
                 category={product.categoria}
                 imageUrl={product.imagen}
               />
-              <div className="flex items-center mt-2">
+              <div className="mt-2">
+                <label className="mr-2">Cantidad:</label>
                 <input
                   type="number"
                   min="1"
                   defaultValue="1"
-                  id={`quantity-${product.id}`}
-                  className="w-16 p-1 border rounded text-center"
+                  className="p-1 border rounded w-16"
+                  id={`cantidad-${product.id}`}
                 />
-                <button
-                  onClick={() => {
-                    const quantity = parseInt(
-                      document.getElementById(`quantity-${product.id}`).value
-                    );
-                    addToCart(product, quantity);
-                  }}
-                  className="bg-blue-500 text-white p-1 rounded ml-2"
-                >
-                  Añadir a Favoritos
-                </button>
               </div>
+              <button
+                onClick={() => {
+                  const cantidad = parseInt(
+                    document.getElementById(`cantidad-${product.id}`).value
+                  );
+                  if (cantidad > 0) {
+                    addToCart(product, cantidad);
+                  }
+                }}
+                className="bg-blue-500 text-white p-1 rounded mt-2"
+              >
+                Añadir a Favoritos
+              </button>
             </div>
           ))}
         </div>
@@ -125,9 +148,9 @@ export default function Home() {
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {cart.map((item, index) => (
+                {cart.map((item) => (
                   <div
-                    key={index}
+                    key={item.id}
                     className="bg-white border rounded shadow-md p-4 flex flex-col items-center text-center"
                   >
                     <img
@@ -136,14 +159,29 @@ export default function Home() {
                       className="w-20 h-20 object-cover rounded-full mb-4"
                     />
                     <span className="font-semibold">{item.nombre}</span>
-                    <span className="text-gray-500">Cantidad: {item.quantity}</span>
+                    <div>
+                      <label>Cantidad:</label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={item.cantidad}
+                        onChange={(e) =>
+                          updateQuantity(item.id, parseInt(e.target.value))
+                        }
+                        className="p-1 border rounded w-16 mx-2"
+                      />
+                    </div>
+                    <span>Subtotal: ${(item.precio * item.cantidad).toFixed(2)}</span>
+                    <button
+                      onClick={() => removeFromCart(item.id)}
+                      className="bg-red-500 text-white p-1 rounded mt-2"
+                    >
+                      Eliminar
+                    </button>
                   </div>
                 ))}
               </div>
-              {/* Mostrar el precio total */}
-              <div className="text-lg font-bold mt-4">
-                Total: ${totalPrice.toFixed(2)}
-              </div>
+              <div className="text-lg font-bold mt-4">Total: ${totalPrice.toFixed(2)}</div>
             </>
           )}
         </div>
