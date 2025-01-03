@@ -28,8 +28,7 @@ export default function Home() {
 
   const filteredProducts = products.filter(product => 
     (categoryFilter === 'all' || product.categoria_id === parseInt(categoryFilter)) &&
-    (product.nombre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-     product.descripcion.toLowerCase().includes(searchQuery.toLowerCase())) // Filtrado por búsqueda
+    (product.nombre.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   // Función para agregar mis productos favoritos

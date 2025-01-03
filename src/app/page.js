@@ -2,6 +2,20 @@ import "./globals.css";
 import Link from "next/link";
 
 export default function Home() {
+  const [categorias, setCategorias] = useState([]);
+
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      const response = await fetch('/api/categorias');
+      const data = await response.json();
+      setCategorias(data);
+    };
+    fetchCategorias();
+  }, []);
+
+  const handleCategoriaClick = (categoriaId) => {
+    router.push(`/menu?categoria=${categoriaId}`);
+  };
   return (
     <section className="home">
       <div className="presentation">
@@ -12,12 +26,17 @@ export default function Home() {
         />
         <h1>¡Bienvenidos a Nuestra Web!</h1>
         <p>Descubrí todas las opciones que tenemos para vos.</p>
-        <Link href="/menu">
-        <p><button>EXPLORAR</button></p>
-        </Link>
-        <p><button>COMIDA</button></p>
-        <p><button>BEBIDAS</button></p>
-        <p><button>POSTRES</button></p>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {categorias.map((categoria) => (
+          <button
+            key={categoria.id}
+            onClick={() => handleCategoriaClick(categoria.id)}
+            className="p-6 bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow"
+          >
+            <h2 className="text-xl font-semibold">{categoria.nombre}</h2>
+          </button>
+        ))}
+      </div>
       </div>
 
       {/* Footer */}
