@@ -132,7 +132,7 @@ export default function Home() {
                     addToCart(product, cantidad);
                   }
                 }}
-                className="bg-blue-500 text-white p-1 rounded mt-2"
+                className="bg-orange-500 text-white p-1 rounded mt-2"
               >
                 Añadir a Favoritos
               </button>
