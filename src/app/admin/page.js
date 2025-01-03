@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebaseConfig';
 import Login from '../../components/Login/Login';
+import OrderManagement from '@/components/OrderManagement';
 
 export default function Admin() {
   const [products, setProducts] = useState([]);
@@ -302,7 +303,8 @@ export default function Admin() {
         </div>
       </div>
 
-
+      <OrderManagement />
+      
       {/* Lista de productos existentes */}
       <div className="overflow-x-auto bg-white rounded-lg shadow">
         <table className="w-full border-collapse">
