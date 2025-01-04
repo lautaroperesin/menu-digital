@@ -46,32 +46,40 @@ export async function PATCH(request, { params }) {
   const validStates = ['pendiente', 'en-proceso', 'completado'];
 
   try {
-    const { id } = params;
-    const { estado } = await request.json();
+    const { id } = await params;
+    const body = await request.json();
+    console.log('Body recibido:', body);
 
-    if (!validStates.includes(estado)) {
+    const { status } = body;
+    console.log('Estado:', status);
+    console.log('ID:', id);
+
+    if (!validStates.includes(status)) {
       return NextResponse.json({ error: 'Estado no válido' });
     }
     
-    await db.query(
+     // Actualizar el estado en la base de datos
+     const result = await db.query(
       'UPDATE pedidos SET estado = ? WHERE id = ?',
-      [estado, id]
+      [status, id]  
     );
-    
-    const [pedidoActualizado] = await db.query(
-      'SELECT * FROM pedidos WHERE id = ?',
-      [id]
-    );
-    
-    if (pedidoActualizado.length === 0) {
+
+    if (result.affectedRows === 0) {
       return NextResponse.json(
         { error: 'Pedido no encontrado' },
         { status: 404 }
       );
     }
 
+    // Obtener el pedido actualizado
+    const [pedidoActualizado] = await db.query(
+      'SELECT * FROM pedidos WHERE id = ?',
+      [id]
+    );
+    console.log(pedidoActualizado);
     return NextResponse.json(pedidoActualizado[0]);
   } catch (error) {
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Error al actualizar el pedido' },
       { status: 500 }
