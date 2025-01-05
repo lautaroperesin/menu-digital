@@ -1,4 +1,5 @@
 'use client';
+import OrderCart from '@/components/OrderCart';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { useEffect, useState } from 'react';
 
@@ -7,9 +8,10 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [cart, setCart] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [carrito, setCarrito] = useState([]);
+  const [pedidoExitoso, setPedidoExitoso] = useState(false);
 
+  // Obtener productos y categorias de la base de datos
   useEffect(() => {
     fetchProducts();
     fetchCategories();
@@ -27,47 +29,100 @@ export default function Home() {
     setCategories(data);
   };
 
+  // Filtrar productos por categoría y búsqueda por nombre
   const filteredProducts = products.filter(
     (product) =>
       (categoryFilter === 'all' || product.categoria_id === parseInt(categoryFilter)) &&
       product.nombre.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Función para añadir al carrito o actualizar la cantidad
-  const addToCart = (product, cantidad) => {
-    const existingProductIndex = cart.findIndex((item) => item.id === product.id);
-
-    if (existingProductIndex !== -1) {
-      const updatedCart = [...cart];
-      updatedCart[existingProductIndex].cantidad += cantidad;
-      setCart(updatedCart);
+  // Añadir producto al carrito
+  const agregarAlCarrito = (producto) => {
+    const itemExistente = carrito.find(item => item.id === producto.id);
+    
+    if (itemExistente) {
+      setCarrito(carrito.map(item =>
+        item.id === producto.id
+          ? { ...item, cantidad: item.cantidad + 1, subtotal: (item.cantidad + 1) * item.precio }
+          : item
+      ));
     } else {
-      setCart([...cart, { ...product, cantidad }]);
+      setCarrito([...carrito, {
+        id: producto.id,
+        nombre: producto.nombre,
+        precio: producto.precio,
+        cantidad: 1,
+        subtotal: producto.precio
+      }]);
     }
-
-    setTotalPrice((prevTotal) => prevTotal + product.precio * cantidad);
   };
 
-  // Función para eliminar un producto del carrito
-  const removeFromCart = (productId) => {
-    const updatedCart = cart.filter((item) => item.id !== productId);
-    const productToRemove = cart.find((item) => item.id === productId);
-
-    setTotalPrice((prevTotal) => prevTotal - productToRemove.precio * productToRemove.cantidad);
-    setCart(updatedCart);
+  const aumentarCantidad = (producto) => {
+    setCarrito(carrito.map(item =>
+      item.id === producto.id
+        ? { ...item, cantidad: item.cantidad + 1, subtotal: (item.cantidad + 1) * item.precio }
+        : item
+    ));
   };
 
-  // Función para cambiar la cantidad de un producto en el carrito
-  const updateQuantity = (productId, nuevaCantidad) => {
-    const updatedCart = cart.map((item) => {
-      if (item.id === productId) {
-        const diferenciaCantidad = nuevaCantidad - item.cantidad;
-        setTotalPrice((prevTotal) => prevTotal + item.precio * diferenciaCantidad);
-        return { ...item, cantidad: nuevaCantidad };
+  const disminuirCantidad = (productoId) => {
+    setCarrito(carrito.map(item =>
+      item.id === productoId && item.cantidad > 1
+        ? { ...item, cantidad: item.cantidad - 1, subtotal: (item.cantidad - 1) * item.precio }
+        : item
+    ).filter(item => item.cantidad > 0));
+  };
+
+  const eliminarDelCarrito = (productoId) => {
+    setCarrito(carrito.filter(item => item.id !== productoId));
+  };
+
+  const realizarPedido = async () => {
+    const total = carrito.reduce((total, item) => {
+      const itemSubtotal = parseFloat(item.subtotal) || 0;
+      return total + itemSubtotal;
+  }, 0);
+
+  
+    try {
+      const pedido = {
+        mesa_id: 1,
+        estado: 'pendiente',
+        total: total,
+        detalle_pedidos: carrito.map(item => ({
+          producto_id: item.id,
+          cantidad: item.cantidad,
+          precio_unitario: item.precio,
+          subtotal: item.subtotal
+        }))
+      };
+
+      const response = await fetch('/api/pedidos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(pedido),
+      });
+
+      const data = await response.json();
+
+      console.log('Pedido:', pedido);
+      console.log('Respuesta:', response.status, data);
+      
+      if (!response.ok) {
+          console.error('Error en la respuesta del servidor:', data);
       }
-      return item;
-    });
-    setCart(updatedCart);
+
+      if (response.ok) {
+        console.log('Pedido realizado con éxito');
+        setPedidoExitoso(true);
+        setCarrito([]);
+        setTimeout(() => setPedidoExitoso(false), 3000);
+      }
+    } catch (error) {
+      console.error('Error al realizar el pedido:', error);
+    }
   };
 
   return (
@@ -106,85 +161,22 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProducts.map((product) => (
             <div key={product.id}>
-              <ProductCard
-                title={product.nombre}
-                price={product.precio}
-                description={product.descripcion}
-                category={product.categoria}
-                imageUrl={product.imagen}
-              />
-              <div className="mt-2">
-                <label className="mr-2">Cantidad:</label>
-                <input
-                  type="number"
-                  min="1"
-                  defaultValue="1"
-                  className="p-1 border rounded w-16"
-                  id={`cantidad-${product.id}`}
-                />
-              </div>
-              <button
-                onClick={() => {
-                  const cantidad = parseInt(
-                    document.getElementById(`cantidad-${product.id}`).value
-                  );
-                  if (cantidad > 0) {
-                    addToCart(product, cantidad);
-                  }
-                }}
-                className="bg-orange-500 text-white p-1 rounded mt-2"
-              >
-                Añadir a Favoritos
-              </button>
+              <ProductCard product={product} onAddToCart={agregarAlCarrito} />
             </div>
           ))}
         </div>
 
-        {/* Resumen del carrito */}
-        <div className="mt-8 border-t pt-4">
-          <h2 className="text-2xl font-bold mb-4">FAVORITOS</h2>
-          {cart.length === 0 ? (
-            <p className="text-gray-500">Su lista está vacía</p>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {cart.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white border rounded shadow-md p-4 flex flex-col items-center text-center"
-                  >
-                    <img
-                      src={item.imagen}
-                      alt={item.nombre}
-                      className="w-20 h-20 object-cover rounded-full mb-4"
-                    />
-                    <span className="font-semibold">{item.nombre}</span>
-                    <div>
-                      <label>Cantidad:</label>
-                      <input
-                        type="number"
-                        min="1"
-                        value={item.cantidad}
-                        onChange={(e) =>
-                          updateQuantity(item.id, parseInt(e.target.value))
-                        }
-                        className="p-1 border rounded w-16 mx-2"
-                      />
-                    </div>
-                    <span>Subtotal: ${(item.precio * item.cantidad).toFixed(2)}</span>
-                    <button
-                      onClick={() => removeFromCart(item.id)}
-                      className="bg-red-500 text-white p-1 rounded mt-2"
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <div className="text-lg font-bold mt-4">Total: ${totalPrice.toFixed(2)}</div>
-            </>
-          )}
+        <div className="lg:col-span-1">
+          <OrderCart
+            cartItems={carrito}
+            onIncreaseQuantity={aumentarCantidad}
+            onDecreaseQuantity={disminuirCantidad}
+            onRemoveItem={eliminarDelCarrito}
+            onSubmitOrder={realizarPedido}
+            orderSuccess={pedidoExitoso}
+          />
         </div>
+
       </div>
       <link
         rel="stylesheet"

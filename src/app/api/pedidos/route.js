@@ -36,8 +36,16 @@ export async function POST(request) {
   try {
     const { mesa_id, items } = await request.json();
 
+    console.log('Pedido:', { mesa_id, items });
+
+    // Validar los datos recibidos
+    if (!mesa_id || !items || items.length === 0) {
+      return NextResponse.json({ error: 'Faltan datos' }, { status: 400 });
+    }
+
     // Iniciar transacción
-    await db.beginTransaction();
+    const connection = await db.getConnection();
+    await connection.beginTransaction();
 
     try {
       // Calcular el total del pedido
@@ -84,7 +92,7 @@ export async function POST(request) {
       }
 
       // Confirmar transacción
-      await db.commit();
+      await connection.commit();
 
       // Obtener el pedido completo con sus detalles
       const [pedidoCompleto] = await db.query(`
@@ -107,10 +115,11 @@ export async function POST(request) {
 
     } catch (error) {
       // Si hay error, revertir la transacción
-      await db.rollback();
+      await connection.rollback();
       throw error;
     }
   } catch (error) {
+    console.error('Error al crear el pedido:', error);
     return NextResponse.json(
       { error: 'Error al crear el pedido: ' + error.message },
       { status: 500 }

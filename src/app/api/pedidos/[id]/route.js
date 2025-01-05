@@ -48,11 +48,7 @@ export async function PATCH(request, { params }) {
   try {
     const { id } = await params;
     const body = await request.json();
-    console.log('Body recibido:', body);
-
     const { status } = body;
-    console.log('Estado:', status);
-    console.log('ID:', id);
 
     if (!validStates.includes(status)) {
       return NextResponse.json({ error: 'Estado no válido' });
@@ -76,7 +72,7 @@ export async function PATCH(request, { params }) {
       'SELECT * FROM pedidos WHERE id = ?',
       [id]
     );
-    console.log(pedidoActualizado);
+
     return NextResponse.json(pedidoActualizado[0]);
   } catch (error) {
     console.error('Error:', error);
