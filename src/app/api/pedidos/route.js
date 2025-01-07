@@ -34,12 +34,12 @@ export async function GET() {
 // Crear nuevo pedido
 export async function POST(request) {
   try {
-    const { mesa_id, items } = await request.json();
+    const { mesa_id, detalle_pedidos } = await request.json();
 
-    console.log('Pedido:', { mesa_id, items });
+    console.log('Pedido:', { mesa_id, detalle_pedidos });
 
     // Validar los datos recibidos
-    if (!mesa_id || !items || items.length === 0) {
+    if (!mesa_id || !detalle_pedidos || detalle_pedidos.length === 0) {
       return NextResponse.json({ error: 'Faltan datos' }, { status: 400 });
     }
 
@@ -50,7 +50,7 @@ export async function POST(request) {
     try {
       // Calcular el total del pedido
       let total = 0;
-      for (const item of items) {
+      for (const item of detalle_pedidos) {
         // Obtener el precio actual del producto
         const [productos] = await db.query(
           'SELECT precio FROM productos WHERE id = ?',
@@ -74,7 +74,7 @@ export async function POST(request) {
       const pedidoId = resultPedido.insertId;
 
       // Insertar los detalles del pedido
-      for (const item of items) {
+      for (const item of detalle_pedidos) {
         const [productos] = await db.query(
           'SELECT precio FROM productos WHERE id = ?',
           [item.producto_id]
