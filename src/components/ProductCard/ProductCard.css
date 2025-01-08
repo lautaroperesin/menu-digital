@@ -1,0 +1,111 @@
+/* Estilos generales del contenedor */
+.product-card-container {
+  width: 90%;
+  max-width: 20rem;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #ffffff, #f3f3f3);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 5px 5px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  transform: translateY(-10px);
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s;
+}
+
+/* Fondo decorativo detrás */
+.product-card-container::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 160%;
+  height: 160%;
+  background: radial-gradient(circle, rgba(255, 209, 102, 0.5), rgba(255, 148, 92, 0.2), transparent);
+  filter: blur(40px);
+  opacity: 0.7;
+  z-index: -1;
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+/* Hover: Elevación */
+.product-card-container:hover {
+  transform: translateY(-20px);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2), 0 8px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-card-container:hover::before {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* Imagen */
+.product-image:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* Título */
+.product-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  background: linear-gradient(90deg, #000000, #000000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGlow 2s infinite alternate;
+}
+
+/* Categoría */
+.product-category {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4b5563;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Descripción */
+.product-description {
+  color: #374151;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* Precio */
+.product-price {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #d97706;
+  text-align: center;
+  background: linear-gradient(90deg, #ffae00, #ffae00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: priceGlow 1.5s infinite alternate;
+}
+
+/* Animación para el texto del título */
+@keyframes textGlow {
+  from {
+    text-shadow: 0 0 10px rgba(255, 138, 0, 0.6), 0 0 20px rgba(255, 46, 113, 0.4);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(255, 138, 0, 0.8), 0 0 30px rgba(255, 46, 113, 0.6);
+  }
+}
+
+/* Animación para el precio */
+@keyframes priceGlow {
+  from {
+    text-shadow: 0 0 8px rgba(217, 119, 6, 0.5), 0 0 16px rgba(255, 215, 0, 0.4);
+  }
+  to {
+    text-shadow: 0 0 16px rgba(217, 119, 6, 0.8), 0 0 24px rgba(255, 215, 0, 0.6);
+  }
+}
