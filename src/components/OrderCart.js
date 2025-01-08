@@ -71,7 +71,7 @@ export default function OrderCart({ cartItems,
                 <span className="text-xl font-bold">${calculateTotal()}</span>
                 </div>
                 <button
-                className="w-full bg-yellow-500 text-white font-semibold py-2 rounded disabled:opacity-50 hover:bg-yellow-600"
+                className="w-full bg-yellow-500 text-black font-semibold py-2 rounded disabled:opacity-50 hover:bg-yellow-600"
                 size="lg"
                 disabled={cartItems.length === 0}
                 onClick={onSubmitOrder}

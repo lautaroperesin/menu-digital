@@ -107,8 +107,8 @@ export default function Home() {
 
       const data = await response.json();
 
-      console.log('Pedido:', pedido);
-      console.log('Respuesta:', response.status, data);
+      //console.log('Pedido:', pedido);
+      //console.log('Respuesta:', response.status, data);
       
       if (!response.ok) {
           console.error('Error en la respuesta del servidor:', data);
@@ -142,20 +142,28 @@ export default function Home() {
         </div>
 
         {/* Filtro de categorías */}
-        <div className="mb-6">
-          <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="p-2 border rounded"
-          >
-            <option value="all">Todas las categorías</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.nombre}
-              </option>
-            ))}
-          </select>
-        </div>
+        <nav className="mb-8 rounded-lg bg-yellow-400 p-4">
+        <ul className="flex flex-wrap justify-center gap-4">
+          <li>
+            <button
+              onClick={() => setCategoryFilter('all')}
+              className={`p-2 border rounded ${categoryFilter === 'all' ? 'bg-[#f59e0b]' : ''}`}
+            >
+              Todos
+            </button>
+          </li>
+          {categories.map((category) => (
+            <li key={category.id}>
+              <button
+                onClick={() => setCategoryFilter(category.id)}
+                className={`p-2 border rounded ${categoryFilter === category.id ? 'bg-[#f59e0b]' : ''}`}
+              >
+                {category.nombre}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
         {/* Productos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

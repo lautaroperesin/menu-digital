@@ -15,9 +15,6 @@ export default function Home() {
     fetchCategorias();
   }, []);
 
-  const handleCategoriaClick = (categoriaId) => {
-    router.push(`/menu?categoria=${categoriaId}`);
-  };
   return (
     <section className="home">
       <div className="presentation">
@@ -30,13 +27,13 @@ export default function Home() {
         <p>Descubrí todas las opciones que tenemos para vos.</p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {categorias.map((categoria) => (
+          <Link href={`/menu`} key={categoria.id}>
           <button
-            key={categoria.id}
-            onClick={() => handleCategoriaClick(categoria.id)}
             className="p-6 bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow"
           >
             <h2 className="text-xl font-semibold">{categoria.nombre}</h2>
           </button>
+        </Link>
         ))}
       </div>
       </div>
