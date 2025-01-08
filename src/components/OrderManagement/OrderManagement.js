@@ -1,57 +1,63 @@
 'use client';
 import { useEffect, useState } from "react";
 import './OrderManagement.css';
+import io from 'socket.io-client';
 
 export default function OrderManagement() {
     const [orders, setOrders] = useState([]);
     const [completedOrders, setCompletedOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [socket, setSocket] = useState(null);
 
+     // Inicializar Socket.IO
+  useEffect(() => {
+    const initSocket = async () => {
+      // Asegurarse de que el endpoint de socket está configurado
+      await fetch('/api/socketio');
+      
+      const socketIo = io();
+      setSocket(socketIo);
+
+      // Escuchar actualizaciones de pedidos
+      socketIo.on('orderUpdate', (data) => {
+        if (data.type === 'NEW_ORDER') {
+          setOrders(prevOrders => [...prevOrders, data.order]);
+          alert(`Mesa #${data.order.tableNumber} ha realizado un nuevo pedido`);
+        } else if (data.type === 'UPDATE_ORDER') {
+          setOrders(prevOrders => 
+            prevOrders.map(order => 
+              order.id === data.order.id ? data.order : order
+            )
+          );
+        }
+      });
+
+      return () => {
+        socketIo.disconnect();
+      };
+    };
+
+    initSocket();
+  }, []);
+
+    // Cargar pedidos iniciales
     useEffect(() => {
-        // Cargar los pedidos completados desde localStorage si existen
-        const savedCompletedOrders = JSON.parse(localStorage.getItem('completedOrders')) || [];
-        setCompletedOrders(savedCompletedOrders);
-
-        const ws = new WebSocket('ws://tu-servidor-websocket');
-
-        ws.onopen = () => {
-            console.log('Conectado al servidor de pedidos');
-            setLoading(false);
-        };
-
-        ws.onmessage = (event) => {
-            const newOrder = JSON.parse(event.data);
-            if (newOrder.type === 'NEW_ORDER') {
-                setOrders(prevOrders => [...prevOrders, newOrder.order]);
-            } else if (newOrder.type === 'UPDATE_ORDER') {
-                setOrders(prevOrders => 
-                    prevOrders.map(order => 
-                        order.id === newOrder.order.id ? newOrder.order : order
-                    )
-                );
-            }
-        };
-
-        // Cargar pedidos iniciales
         const fetchInitialOrders = async () => {
-            try {
-                const response = await fetch('/api/pedidos');
-                const data = await response.json();
-                setOrders(data);
-            } catch (error) {
-                console.error('Error al cargar pedidos:', error);
-                alert("No se pudieron cargar los pedidos");
-            } finally {
-                setLoading(false);
-            }
+          try {
+            const response = await fetch('/api/pedidos');
+            const data = await response.json();
+            setOrders(data);
+          } catch (error) {
+            console.error('Error al cargar pedidos:', error);
+            alert("No se pudieron cargar los pedidos");
+          } finally {
+            setLoading(false);
+          }
         };
-
+    
         fetchInitialOrders();
-
-        return () => {
-            ws.close();
-        };
-    }, []);
+      }, []);
+    
 
     const updateOrderStatus = async (orderId, newStatus) => {
         try {
@@ -65,31 +71,19 @@ export default function OrderManagement() {
 
             if (!response.ok) throw new Error('Error al actualizar el pedido');
 
-            setOrders(prevOrders =>
-                prevOrders.map(order =>
-                    order.id === orderId
-                        ? { ...order, estado: newStatus }
-                        : order
-                )
-            );
+            const updatedOrder = await response.json();
 
-            if (newStatus === 'completado') {
-                const completedOrder = orders.find(order => order.id === orderId);
-                setCompletedOrders(prev => {
-                    const updatedCompletedOrders = [...prev, completedOrder];
-                    // Guardar en localStorage para persistencia
-                    localStorage.setItem('completedOrders', JSON.stringify(updatedCompletedOrders));
-                    return updatedCompletedOrders;
-                });
-                setOrders(prev => prev.filter(order => order.id !== orderId));
-            }
+      // Emitir actualización vía socket
+      if (socket) {
+        socket.emit('updateOrderStatus', updatedOrder);
+      }
 
-            alert("Estado Actualizado");
-        } catch (error) {
-            console.error('Error:', error);
-            alert("No se pudo actualizar el estado del pedido");
-        }
-    };
+      alert(`Estado Actualizado. Pedido #${orderId} actualizado a ${newStatus}`);
+    } catch (error) {
+      console.error('Error:', error);
+      alert(`No se pudo actualizar el estado del pedido #${orderId}`);
+    }
+  };
 
     const getStatusColor = (status) => {
         const colors = {
