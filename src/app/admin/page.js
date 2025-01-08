@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../../utils/firebaseConfig';
 import Login from '../../components/Login/Login';
-import OrderManagement from '@/components/OrderManagement';
+import OrderManagement from '@/components/OrderManagement/OrderManagement';
 
 export default function Admin() {
   const [products, setProducts] = useState([]);
