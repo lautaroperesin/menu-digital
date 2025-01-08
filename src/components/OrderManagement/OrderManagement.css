@@ -1,0 +1,112 @@
+/* Contenedor principal */
+.gestion {
+    padding: 2rem;
+    background-color: #f3f4f6; /* Fondo más neutral */
+  }
+  
+  .gestion-full {
+    width: 100%;
+    max-width: 1200px; /* Ancho máximo */
+    margin: 0 auto; /* Centrado */
+  }
+  
+  /* Tarjetas de pedidos */
+  .grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .grid > div {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+    width: 350px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+  }
+  
+  /* Encabezado de tarjeta */
+  .relative header {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0.75rem;
+  }
+  
+  .relative header h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  .relative header p {
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    text-align: center;
+  }
+  
+  /* Estados */
+  .pendiente {
+    background-color: #fef3c7; /* Amarillo suave */
+    color: #92400e;
+  }
+  
+  .en-proceso {
+    background-color: #dbeafe; /* Azul suave */
+    color: #1e40af;
+  }
+  
+  .completado {
+    background-color: #dcfce7; /* Verde suave */
+    color: #166534;
+  }
+  
+  /* Productos */
+  .space-y-2 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .space-y-2 span {
+    font-size: 0.875rem;
+    color: #374151;
+  }
+  
+  /* Total */
+  .pt-4 {
+    padding-top: 1rem;
+  }
+  
+  .border-t {
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  .font-bold {
+    font-weight: 700;
+    color: #111827;
+  }
+  
+  /* Botones desplegables */
+  select {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    color: #374151;
+    background-color: #ffffff;
+  }
+  
+  select:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+  }
+  
+  
