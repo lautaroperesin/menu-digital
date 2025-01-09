@@ -130,17 +130,6 @@ export default function Home() {
       <div className="container mx-auto px-4">
         <h1 className="text-3xl font-bold my-6">NUESTRO MENÚ</h1>
 
-        {/* Barra de búsqueda */}
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Buscar..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="p-2 border rounded w-full"
-          />
-        </div>
-
         {/* Filtro de categorías */}
         <nav className="mb-8 rounded-lg bg-yellow-400 p-4">
         <ul className="flex flex-wrap justify-center gap-4">
@@ -164,6 +153,17 @@ export default function Home() {
           ))}
         </ul>
       </nav>
+
+        {/* Barra de búsqueda */}
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Buscar..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="p-2 border rounded w-full"
+          />
+        </div>
 
         {/* Productos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

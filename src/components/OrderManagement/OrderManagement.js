@@ -5,40 +5,37 @@ import io from 'socket.io-client';
 
 export default function OrderManagement() {
     const [orders, setOrders] = useState([]);
-    const [completedOrders, setCompletedOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [socket, setSocket] = useState(null);
 
-     // Inicializar Socket.IO
-  useEffect(() => {
-    const initSocket = async () => {
-      // Asegurarse de que el endpoint de socket está configurado
-      await fetch('/api/socketio');
-      
-      const socketIo = io();
-      setSocket(socketIo);
-
-      // Escuchar actualizaciones de pedidos
-      socketIo.on('orderUpdate', (data) => {
-        if (data.type === 'NEW_ORDER') {
-          setOrders(prevOrders => [...prevOrders, data.order]);
-          alert(`Mesa #${data.order.tableNumber} ha realizado un nuevo pedido`);
-        } else if (data.type === 'UPDATE_ORDER') {
-          setOrders(prevOrders => 
-            prevOrders.map(order => 
-              order.id === data.order.id ? data.order : order
-            )
-          );
-        }
-      });
-
-      return () => {
-        socketIo.disconnect();
-      };
-    };
-
-    initSocket();
-  }, []);
+    useEffect(() => {
+        const initSocket = async () => {
+          await fetch("/api/socketio");
+    
+          const socketIo = io({
+            path: "/api/socketio",
+          });
+          setSocket(socketIo);
+    
+          socketIo.on("orderUpdate", (data) => {
+            if (data.type === "NEW_ORDER") {
+              setOrders((prevOrders) => [...prevOrders, data.order]);
+            } else if (data.type === "UPDATE_ORDER") {
+              setOrders((prevOrders) =>
+                prevOrders.map((order) =>
+                  order.id === data.order.id ? data.order : order
+                )
+              );
+            }
+          });
+    
+          return () => {
+            socketIo.disconnect();
+          };
+        };
+    
+        initSocket();
+      }, []);
 
     // Cargar pedidos iniciales
     useEffect(() => {
@@ -74,9 +71,17 @@ export default function OrderManagement() {
             const updatedOrder = await response.json();
 
       // Emitir actualización vía socket
-      if (socket) {
+      if (socket && socket.connected) {
         socket.emit('updateOrderStatus', updatedOrder);
       }
+
+      setOrders(prevOrders =>
+        prevOrders.map(order =>
+          order.id === orderId
+            ? { ...order, estado: newStatus }
+            : order
+        )
+      );
 
       alert(`Estado Actualizado. Pedido #${orderId} actualizado a ${newStatus}`);
     } catch (error) {
@@ -98,12 +103,7 @@ export default function OrderManagement() {
         return new Date(timestamp).toLocaleTimeString();
     };
 
-    const removeCompletedOrder = (orderId) => {
-        const updatedCompletedOrders = completedOrders.filter(order => order.id !== orderId);
-        setCompletedOrders(updatedCompletedOrders);
-        // Actualizar en localStorage al eliminar un pedido
-        localStorage.setItem('completedOrders', JSON.stringify(updatedCompletedOrders));
-    };
+    const completedOrders = orders.filter(order => order.estado === 'completado');
 
     if (loading) {
         return (
@@ -182,8 +182,8 @@ export default function OrderManagement() {
                 </header>
                 <div className="h-[600px] pr-4">
                     <div className="bg-green-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {completedOrders.map((order, index) => (
-                            <div key={`${order.id}-${index}`} className="relative">
+                        {completedOrders.map((order) => (
+                            <div key={order.id} className="relative">
                                 <header>
                                     <div className="flex justify-between items-center">
                                         <h3 className="text-xl">Mesa #{order.mesa_id}</h3>
@@ -213,12 +213,6 @@ export default function OrderManagement() {
                                         </div>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={() => removeCompletedOrder(order.id)}
-                                    className="mt-4 text-red-500 hover:text-red-700"
-                                >
-                                    Eliminar
-                                </button>
                             </div>
                         ))}
                     </div>
