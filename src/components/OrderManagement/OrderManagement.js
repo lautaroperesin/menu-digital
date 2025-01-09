@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import './OrderManagement.css';
 import io from 'socket.io-client';
 
@@ -8,34 +8,50 @@ export default function OrderManagement() {
     const [loading, setLoading] = useState(true);
     const [socket, setSocket] = useState(null);
 
-    useEffect(() => {
-        const initSocket = async () => {
-          await fetch("/api/socketio");
+    // useEffect(() => {
+    //     const initSocket = async () => {
+    //         try {
+    //           // Asegurarse de que el endpoint de socket está configurado
+    //           await fetch('/api/socketio');
+              
+    //           const socketIo = io({
+    //             path: "/api/socketio",
+    //             addTrailingSlash: false,
+    //             transports: ['websocket', 'polling'], // Agregamos esto
+    //             reconnectionAttempts: 5, // Y esto para intentos de reconexión
+    //           });
+          
+    //           socketIo.on('connect_error', (err) => {
+    //             console.log('Error de conexión detallado:', err.message);
+    //           });
     
-          const socketIo = io({
-            path: "/api/socketio",
-          });
-          setSocket(socketIo);
+    //         socketIo.on("orderUpdate", (data) => {
+    //           if (data.type === "NEW_ORDER") {
+    //             setOrders(prevOrders => [...prevOrders, data.order]);
+    //             alert(`Nuevo pedido recibido: Mesa ${data.order.tableNumber}`);
+    //             console.log(`Nuevo pedido recibido: Mesa ${data.order.tableNumber}`);
+    //           } else if (data.type === "UPDATE_ORDER") {
+    //             setOrders(prevOrders =>
+    //               prevOrders.map(order =>
+    //                 order.id === data.order.id ? data.order : order
+    //               )
+    //             );
+    //             alert(`Pedido actualizado: ${data.order.status}`);
+    //           }
+    //         });
     
-          socketIo.on("orderUpdate", (data) => {
-            if (data.type === "NEW_ORDER") {
-              setOrders((prevOrders) => [...prevOrders, data.order]);
-            } else if (data.type === "UPDATE_ORDER") {
-              setOrders((prevOrders) =>
-                prevOrders.map((order) =>
-                  order.id === data.order.id ? data.order : order
-                )
-              );
-            }
-          });
+    //         setSocket(socketIo);
     
-          return () => {
-            socketIo.disconnect();
-          };
-        };
+    //         return () => {
+    //           socketIo.disconnect();
+    //         };
+    //       } catch (error) {
+    //         console.error('Error al inicializar socket:', error);
+    //       }
+    //     };
     
-        initSocket();
-      }, []);
+    //     initSocket();
+    //   }, []);
 
     // Cargar pedidos iniciales
     useEffect(() => {
@@ -56,39 +72,41 @@ export default function OrderManagement() {
       }, []);
     
 
-    const updateOrderStatus = async (orderId, newStatus) => {
+      const updateOrderStatus = useCallback(async (orderId, newStatus) => {
         try {
-            const response = await fetch(`/api/pedidos/${orderId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ status: newStatus }),
-            });
-
-            if (!response.ok) throw new Error('Error al actualizar el pedido');
-
-            const updatedOrder = await response.json();
-
-      // Emitir actualización vía socket
-      if (socket && socket.connected) {
-        socket.emit('updateOrderStatus', updatedOrder);
-      }
-
-      setOrders(prevOrders =>
-        prevOrders.map(order =>
-          order.id === orderId
-            ? { ...order, estado: newStatus }
-            : order
-        )
-      );
-
-      alert(`Estado Actualizado. Pedido #${orderId} actualizado a ${newStatus}`);
-    } catch (error) {
-      console.error('Error:', error);
-      alert(`No se pudo actualizar el estado del pedido #${orderId}`);
-    }
-  };
+          const response = await fetch(`/api/pedidos/${orderId}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: newStatus }),
+          });
+    
+          if (!response.ok) throw new Error('Error al actualizar el pedido');
+          
+          const updatedOrder = await response.json();
+    
+          if (socket?.connected) {
+            socket.emit('updateOrderStatus', updatedOrder);
+            console.log('Emitiendo actualización de estado:', updatedOrder);
+          } else {
+            console.warn('Socket no conectado al intentar actualizar estado');
+          }
+    
+          setOrders(prevOrders =>
+            prevOrders.map(order =>
+              order.id === orderId
+                ? { ...order, estado: newStatus }
+                : order
+            )
+          );
+    
+          alert(`Estado Actualizado. Pedido #${orderId} actualizado a ${newStatus}`);
+        } catch (error) {
+          console.error('Error al actualizar estado:', error);
+          alert(`No se pudo actualizar el estado del pedido #${orderId}`);
+        }
+      }, [socket]);
 
     const getStatusColor = (status) => {
         const colors = {

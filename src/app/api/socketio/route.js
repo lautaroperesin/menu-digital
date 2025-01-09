@@ -1,32 +1,43 @@
-import { Server } from 'socket.io';
-let io;
+// import { Server } from 'socket.io';
+// import { NextResponse } from 'next/server';
 
-export async function GET(req) {
-  if (!io) {
-    console.log("Iniciando servidor WebSocket...");
-    const server = req.nextUrl.server;
-    io = new Server(server, {
-      path: "/api/socketio",
-    });
+// let io;
 
-    io.on("connection", (socket) => {
-      console.log("Cliente conectado:", socket.id);
+// export async function GET(req) {
+//   if (!io) {
+//     // Obtener el servidor HTTP subyacente
+//     const res = new NextResponse();
+//     const httpServer = res.socket?.server;
 
-      socket.on("newOrder", (order) => {
-        io.emit("orderUpdate", { type: "NEW_ORDER", order });
-      });
+//     if (httpServer) {
+//       io = new Server(httpServer, {
+//         path: "/api/socketio",
+//         addTrailingSlash: false,
+//         cors: {
+//           origin: "*",
+//           methods: ["GET", "POST"]
+//         }
+//       });
 
-      socket.on("updateOrderStatus", (data) => {
-        io.emit("orderUpdate", { type: "UPDATE_ORDER", order: data });
-      });
+//       io.on("connection", (socket) => {
+//         console.log("Cliente conectado:", socket.id);
 
-      socket.on("disconnect", () => {
-        console.log("Cliente desconectado:", socket.id);
-      });
-    });
-  } else {
-    console.log("Socket.IO ya está configurado.");
-  }
+//         socket.on("newOrder", (order) => {
+//           io.emit("orderUpdate", { type: "NEW_ORDER", order });
+//           console.log("Nuevo pedido emitido:", order);
+//         });
 
-  return new Response("Socket.IO configurado correctamente");
-}
+//         socket.on("updateOrderStatus", (data) => {
+//           io.emit("orderUpdate", { type: "UPDATE_ORDER", order: data });
+//           console.log("Estado actualizado emitido:", data);
+//         });
+
+//         socket.on("disconnect", () => {
+//           console.log("Cliente desconectado:", socket.id);
+//         });
+//       });
+//     }
+//   }
+
+//   return NextResponse.json({ success: true });
+// }
