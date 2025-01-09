@@ -25,7 +25,7 @@ export default function OrderCart({ cartItems,
                 </h2>
             <div className="flex items-center justify-between gap-2 p-2 border rounded">
                 {cartItems.length === 0 ? (
-                <p className="text-gray-500 text-center">No hay items en el pedido</p>
+                <p className="text-gray-500 text-center">No hay productos seleccionados</p>
                 ) : (
                 <div className="space-y-4">
                     {cartItems.map((item) => (
