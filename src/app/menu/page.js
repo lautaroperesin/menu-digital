@@ -10,11 +10,30 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [carrito, setCarrito] = useState([]);
   const [pedidoExitoso, setPedidoExitoso] = useState(false);
+  const [showFilter, setShowFilter] = useState(true); // Estado para la visibilidad del filtro
 
-  // Obtener productos y categorias de la base de datos
   useEffect(() => {
     fetchProducts();
     fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      if (window.scrollY > lastScrollY && window.scrollY > 100) {
+        setShowFilter(false); // Ocultar cuando se desplaza hacia abajo
+      } else {
+        setShowFilter(true); // Mostrar cuando se desplaza hacia arriba
+      }
+      lastScrollY = window.scrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const fetchProducts = async () => {
@@ -29,17 +48,15 @@ export default function Home() {
     setCategories(data);
   };
 
-  // Filtrar productos por categoría y búsqueda por nombre
   const filteredProducts = products.filter(
     (product) =>
       (categoryFilter === 'all' || product.categoria_id === parseInt(categoryFilter)) &&
       product.nombre.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Añadir producto al carrito
   const agregarAlCarrito = (producto) => {
     const itemExistente = carrito.find(item => item.id === producto.id);
-    
+
     if (itemExistente) {
       setCarrito(carrito.map(item =>
         item.id === producto.id
@@ -81,9 +98,8 @@ export default function Home() {
     const total = carrito.reduce((total, item) => {
       const itemSubtotal = parseFloat(item.subtotal) || 0;
       return total + itemSubtotal;
-  }, 0);
+    }, 0);
 
-  
     try {
       const pedido = {
         mesa_id: 1,
@@ -107,11 +123,8 @@ export default function Home() {
 
       const data = await response.json();
 
-      //console.log('Pedido:', pedido);
-      //console.log('Respuesta:', response.status, data);
-      
       if (!response.ok) {
-          console.error('Error en la respuesta del servidor:', data);
+        console.error('Error en la respuesta del servidor:', data);
       }
 
       if (response.ok) {
@@ -131,28 +144,35 @@ export default function Home() {
         <h1 className="text-3xl font-bold my-6">NUESTRO MENÚ</h1>
 
         {/* Filtro de categorías */}
-        <nav className="mb-8 rounded-lg bg-yellow-400 p-4">
-        <ul className="flex flex-wrap justify-center gap-4">
-          <li>
-            <button
-              onClick={() => setCategoryFilter('all')}
-              className={`p-2 border rounded ${categoryFilter === 'all' ? 'bg-[#f59e0b]' : ''}`}
-            >
-              Todos
-            </button>
-          </li>
-          {categories.map((category) => (
-            <li key={category.id}>
-              <button
-                onClick={() => setCategoryFilter(category.id)}
-                className={`p-2 border rounded ${categoryFilter === category.id ? 'bg-[#f59e0b]' : ''}`}
-              >
-                {category.nombre}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
+          <nav
+            className={`nav-filter ${showFilter ? 'translate-y-0' : '-translate-y-full'}`}
+          >
+            <ul>
+              <li>
+                <button
+                  onClick={() => setCategoryFilter('all')}
+                  className={`${
+                    categoryFilter === 'all' ? 'active' : ''
+                  }`}
+                >
+                  Todos
+                </button>
+              </li>
+              {categories.map((category) => (
+                <li key={category.id}>
+                  <button
+                    onClick={() => setCategoryFilter(category.id)}
+                    className={`${
+                      categoryFilter === category.id ? 'active' : ''
+                    }`}
+                  >
+                    {category.nombre}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
 
         {/* Barra de búsqueda */}
         <div className="mb-4">
@@ -184,7 +204,6 @@ export default function Home() {
             orderSuccess={pedidoExitoso}
           />
         </div>
-
       </div>
       <link
         rel="stylesheet"

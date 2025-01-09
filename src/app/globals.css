@@ -186,6 +186,51 @@ nav {
   }
 }
 
+/* Estilo para el filtro de categorías */
+.nav-filter {
+  background-color: #ffb444; 
+  padding: 1rem;
+  border-radius: 0 0 0.5rem 0.5rem; 
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2); 
+  transition: transform 0.3s ease-in-out; 
+  }
+
+
+.nav-filter ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem; 
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-filter button {
+  padding: 0.5rem 1rem; 
+  border: 2px solid transparent; 
+  border-radius: 0.375rem; 
+  background-color: #f3f4f6;
+  color: #111827; 
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; 
+}
+
+.nav-filter button:hover {
+  background-color: #ffb444; 
+}
+
+.nav-filter button:active {
+  transform: scale(0.95); 
+}
+
+.nav-filter .active {
+  background-color: #f59e0b; 
+  color: white; 
+  border-color: #d97706; 
+}
+
 
 /*SECTION NOSOTROS*/
 /* Sección sobre nosotros */
