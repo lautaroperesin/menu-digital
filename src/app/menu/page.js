@@ -2,59 +2,57 @@
 import OrderCart from '@/components/OrderCart';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 
+export default function Menu() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const categoria = searchParams.get('categoria');
 
-export default function Home() {
   const [products, setProducts] = useState([]);
+  const [productosFiltrados, setProductosFiltrados] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [categoryFilter, setCategoryFilter] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
   const [carrito, setCarrito] = useState([]);
   const [pedidoExitoso, setPedidoExitoso] = useState(false);
-  const [showFilter, setShowFilter] = useState(true); // Estado para la visibilidad del filtro
 
-  useEffect(() => {
-    fetchProducts();
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-
-    const handleScroll = () => {
-      if (window.scrollY > lastScrollY && window.scrollY > 100) {
-        setShowFilter(false); // Ocultar cuando se desplaza hacia abajo
-      } else {
-        setShowFilter(true); // Mostrar cuando se desplaza hacia arriba
+   useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch('/api/productos');
+        const data = await res.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error al cargar productos:', error);
       }
-      lastScrollY = window.scrollY;
     };
 
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('/api/categorias');
+        const data = await res.json();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error al cargar categorías:', error);
+      }
     };
+
+    const fetchData = async () => {
+      await Promise.all([fetchProducts(), fetchCategories()]);
+    };
+
+    fetchData();
   }, []);
 
-  const fetchProducts = async () => {
-    const response = await fetch('/api/productos');
-    const data = await response.json();
-    setProducts(data);
-  };
-
-  const fetchCategories = async () => {
-    const response = await fetch('/api/categorias');
-    const data = await response.json();
-    setCategories(data);
-  };
-
-  const filteredProducts = products.filter(
-    (product) =>
-      (categoryFilter === 'all' || product.categoria_id === parseInt(categoryFilter)) &&
-      product.nombre.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    if (categoria) {
+      const filtrados = products.filter(
+        (producto) => producto.categoria_id === parseInt(categoria)
+      );
+      setProductosFiltrados(filtrados);
+    } else {
+      setProductosFiltrados(products);
+    }
+  }, [categoria, products]);
 
   const agregarAlCarrito = (producto) => {
     const itemExistente = carrito.find(item => item.id === producto.id);
@@ -146,16 +144,12 @@ export default function Home() {
         <h1 className="text-3xl font-bold my-6">NUESTRO MENÚ</h1>
 
         {/* Filtro de categorías */}
-          <nav
-            className={`nav-filter ${showFilter ? 'translate-y-0' : '-translate-y-full'}`}
-          >
-            <ul>
+          <nav className="mb-4 flex justify-center space-x-4 overflow-x rounded-3xl">
+             <ul>
               <li>
                 <button
-                  onClick={() => setCategoryFilter('all')}
-                  className={`${
-                    categoryFilter === 'all' ? 'active' : ''
-                  }`}
+                  onClick={() => router.push('/menu')}
+                  className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg"
                 >
                   Todos
                 </button>
@@ -163,10 +157,8 @@ export default function Home() {
               {categories.map((category) => (
                 <li key={category.id}>
                   <button
-                    onClick={() => setCategoryFilter(category.id)}
-                    className={`${
-                      categoryFilter === category.id ? 'active' : ''
-                    }`}
+                    onClick={() => router.push(`/menu?categoria=${category.id}`)}
+                    className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg"
                   >
                     {category.nombre}
                   </button>
@@ -175,21 +167,9 @@ export default function Home() {
             </ul>
           </nav>
 
-
-        {/* Barra de búsqueda */}
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Buscar..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="p-2 border rounded w-full"
-          />
-        </div>
-
         {/* Productos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product) => (
+          {productosFiltrados.map((product) => (
             <div key={product.id}>
               <ProductCard product={product} onAddToCart={agregarAlCarrito} />
             </div>

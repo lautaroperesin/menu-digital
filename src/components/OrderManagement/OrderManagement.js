@@ -8,50 +8,71 @@ export default function OrderManagement() {
     const [loading, setLoading] = useState(true);
     const [socket, setSocket] = useState(null);
 
-    // useEffect(() => {
-    //     const initSocket = async () => {
-    //         try {
-    //           // Asegurarse de que el endpoint de socket está configurado
-    //           await fetch('/api/socketio');
-              
-    //           const socketIo = io({
-    //             path: "/api/socketio",
-    //             addTrailingSlash: false,
-    //             transports: ['websocket', 'polling'], // Agregamos esto
-    //             reconnectionAttempts: 5, // Y esto para intentos de reconexión
-    //           });
-          
-    //           socketIo.on('connect_error', (err) => {
-    //             console.log('Error de conexión detallado:', err.message);
-    //           });
+    useEffect(() => {
+        const initSocket = async () => {
+            try {
+                console.log('🔄 Iniciando conexión Socket.IO...');
+                
+                const socketResponse = await fetch('/api/socketio');
+                const socketData = await socketResponse.json();
+                console.log('Respuesta del servidor Socket.IO:', socketData);
+                
+                const socketIo = io({
+                    path: '/api/socketio',
+                    transports: ['polling', 'websocket'],
+                    reconnectionDelay: 1000,
+                    reconnection: true,
+                    reconnectionAttempts: 10,
+                    forceNew: true,        // Agregamos esto
+                    timeout: 10000,        // Y esto
+                    autoConnect: false     // Y esto
+                });
+            
+                socketIo.on('connect', () => {
+                  console.log('Socket conectado exitosamente');
+                });
+            
+                socketIo.on('connect_error', (err) => {
+                  console.log('Error de conexión Socket.IO:', {
+                    message: err.message,
+                    description: err.description,
+                    type: err.type,
+                    context: err.context
+                  });
+                });
+            
+                socketIo.on('error', (err) => {
+                  console.log('Error general Socket.IO:', err);
+                });
     
-    //         socketIo.on("orderUpdate", (data) => {
-    //           if (data.type === "NEW_ORDER") {
-    //             setOrders(prevOrders => [...prevOrders, data.order]);
-    //             alert(`Nuevo pedido recibido: Mesa ${data.order.tableNumber}`);
-    //             console.log(`Nuevo pedido recibido: Mesa ${data.order.tableNumber}`);
-    //           } else if (data.type === "UPDATE_ORDER") {
-    //             setOrders(prevOrders =>
-    //               prevOrders.map(order =>
-    //                 order.id === data.order.id ? data.order : order
-    //               )
-    //             );
-    //             alert(`Pedido actualizado: ${data.order.status}`);
-    //           }
-    //         });
+            socketIo.on("orderUpdate", (data) => {
+              if (data.type === "NEW_ORDER") {
+                setOrders(prevOrders => [...prevOrders, data.order]);
+                alert(`Nuevo pedido recibido: Mesa ${data.order.tableNumber}`);
+                console.log(`Nuevo pedido recibido: Mesa ${data.order.tableNumber}`);
+              } else if (data.type === "UPDATE_ORDER") {
+                setOrders(prevOrders =>
+                  prevOrders.map(order =>
+                    order.id === data.order.id ? data.order : order
+                  )
+                );
+                alert(`Pedido actualizado: ${data.order.status}`);
+                console.log(`Pedido actualizado: ${data.order.status}`);
+              }
+            });
     
-    //         setSocket(socketIo);
+            setSocket(socketIo);
     
-    //         return () => {
-    //           socketIo.disconnect();
-    //         };
-    //       } catch (error) {
-    //         console.error('Error al inicializar socket:', error);
-    //       }
-    //     };
+            return () => {
+              socketIo.disconnect();
+            };
+          } catch (error) {
+            console.error('Error al inicializar socket:', error);
+          }
+        };
     
-    //     initSocket();
-    //   }, []);
+        initSocket();
+      }, []);
 
     // Cargar pedidos iniciales
     useEffect(() => {
