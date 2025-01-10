@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState, useCallback } from "react";
 import './OrderManagement.css';
-import io from 'socket.io-client';
+import { io } from "socket.io-client";
 
 export default function OrderManagement() {
     const [orders, setOrders] = useState([]);
@@ -23,10 +23,12 @@ export default function OrderManagement() {
                     reconnectionDelay: 1000,
                     reconnection: true,
                     reconnectionAttempts: 10,
-                    forceNew: true,        // Agregamos esto
-                    timeout: 10000,        // Y esto
-                    autoConnect: false     // Y esto
+                    forceNew: true,
+                    timeout: 10000,
+                    autoConnect: false
                 });
+
+                console.log('🚀 Socket.IO iniciado:', socketIo);
             
                 socketIo.on('connect', () => {
                   console.log('Socket conectado exitosamente');
