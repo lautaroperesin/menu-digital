@@ -4,7 +4,8 @@ import db from '@/utils/db';
 // Obtener todos los pedidos
 export async function GET() {
   try {
-    const [pedidos] = await db.query(`
+    const connection = await db.getConnection();
+    const [pedidos] = await connection.query(`
     SELECT p.*, 
       COUNT(dp.id) as total_items,
       JSON_ARRAYAGG(
@@ -21,6 +22,8 @@ export async function GET() {
     GROUP BY p.id
     ORDER BY p.fecha_hora DESC;
     `);
+
+    connection.release();
     
     return NextResponse.json(pedidos);
   } catch (error) {
@@ -52,7 +55,7 @@ export async function POST(request) {
       let total = 0;
       for (const item of detalle_pedidos) {
         // Obtener el precio actual del producto
-        const [productos] = await db.query(
+        const [productos] = await connection.query(
           'SELECT precio FROM productos WHERE id = ?',
           [item.producto_id]
         );
@@ -66,7 +69,7 @@ export async function POST(request) {
       }
 
       // Insertar el pedido
-      const [resultPedido] = await db.query(
+      const [resultPedido] = await connection.query(
         'INSERT INTO pedidos (mesa_id, estado, total, fecha_hora) VALUES (?, "pendiente", ?, NOW())',
         [mesa_id, total]
       );
@@ -75,7 +78,7 @@ export async function POST(request) {
 
       // Insertar los detalles del pedido
       for (const item of detalle_pedidos) {
-        const [productos] = await db.query(
+        const [productos] = await connection.query(
           'SELECT precio FROM productos WHERE id = ?',
           [item.producto_id]
         );
@@ -83,7 +86,7 @@ export async function POST(request) {
         const precio = productos[0].precio;
         const subtotal = precio * item.cantidad;
 
-        await db.query(
+        await connection.query(
           `INSERT INTO detalle_pedidos 
            (pedido_id, producto_id, cantidad, precio_unitario, subtotal)
            VALUES (?, ?, ?, ?, ?)`,
@@ -95,7 +98,7 @@ export async function POST(request) {
       await connection.commit();
 
       // Obtener el pedido completo con sus detalles
-      const [pedidoCompleto] = await db.query(`
+      const [pedidoCompleto] = await connection.query(`
         SELECT p.*, 
           JSON_ARRAYAGG(
             JSON_OBJECT(
@@ -110,6 +113,8 @@ export async function POST(request) {
         WHERE p.id = ?
         GROUP BY p.id
       `, [pedidoId]);
+
+      connection.release();
 
       return NextResponse.json(pedidoCompleto[0]);
 

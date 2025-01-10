@@ -5,8 +5,6 @@ export default function ProductsTable({ products, categories, handleEdit, handle
     const [categoryFilter, setCategoryFilter] = useState('all');
     const [search, setSearch] = useState('');
 
-
-    console.log(products);
     const leakedProducts = products.filter(product => 
         categoryFilter === 'all' || product.categoria_id === parseInt(categoryFilter)
       )

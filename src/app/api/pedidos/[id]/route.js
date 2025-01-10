@@ -5,8 +5,9 @@ import db from '@/utils/db';
 export async function GET(request, { params }) {
   try {
     const { id } = params;
+    const connection = await db.getConnection();
     
-    const [pedido] = await db.query(`
+    const [pedido] = await connection.query(`
       SELECT p.*, 
         JSON_ARRAYAGG(
           JSON_OBJECT(
@@ -23,6 +24,8 @@ export async function GET(request, { params }) {
       WHERE p.id = ?
       GROUP BY p.id
     `, [id]);
+
+    connection.release();
     
     if (pedido.length === 0) {
       return NextResponse.json(
@@ -49,13 +52,14 @@ export async function PATCH(request, { params }) {
     const { id } = await params;
     const body = await request.json();
     const { status } = body;
+    const connection = await db.getConnection();
 
     if (!validStates.includes(status)) {
       return NextResponse.json({ error: 'Estado no válido' });
     }
     
      // Actualizar el estado en la base de datos
-     const result = await db.query(
+     const result = await connection.query(
       'UPDATE pedidos SET estado = ? WHERE id = ?',
       [status, id]  
     );
@@ -68,10 +72,12 @@ export async function PATCH(request, { params }) {
     }
 
     // Obtener el pedido actualizado
-    const [pedidoActualizado] = await db.query(
+    const [pedidoActualizado] = await connection.query(
       'SELECT * FROM pedidos WHERE id = ?',
       [id]
     );
+
+    connection.release();
 
     return NextResponse.json(pedidoActualizado[0]);
   } catch (error) {

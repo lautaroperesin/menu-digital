@@ -3,7 +3,10 @@ import db from '../../../utils/db';
 
 export async function GET() {
   try {
-    const [productos] = await db.query('SELECT p.*, c.nombre as categoria_nombre FROM productos p LEFT JOIN categorias c ON p.categoria_id = c.id ORDER BY p.nombre');
+    const connection = await db.getConnection();
+    const [productos] = await connection.query('SELECT p.*, c.nombre as categoria_nombre FROM productos p LEFT JOIN categorias c ON p.categoria_id = c.id ORDER BY p.nombre');
+    connection.release();
+
     return new Response(JSON.stringify(productos), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
@@ -20,6 +23,7 @@ export async function GET() {
 export async function POST(request) {
   try {
     const body = await request.json();
+    const connection = await db.getConnection();
     const { nombre, precio, imagen, categoria_id, descripcion } = body;
     
     console.log('Datos recibidos:', body);
@@ -31,13 +35,16 @@ export async function POST(request) {
       );
     }
 
-    await db.query('INSERT INTO productos (nombre, precio, imagen, descripcion, categoria_id) VALUES (?, ?, ?, ?, ?)', [
+    await connection.query('INSERT INTO productos (nombre, precio, imagen, descripcion, categoria_id) VALUES (?, ?, ?, ?, ?)', [
       nombre,
       precio,
       imagen,
       descripcion,
       categoria_id
     ]);
+
+    connection.release();
+
     return new Response(
       JSON.stringify({ message: 'Producto agregado' }),
       { status: 201, headers: { 'Content-Type': 'application/json' } }
@@ -54,11 +61,14 @@ export async function PUT(request) {
   try {
     const data = await request.json();
     console.log('Datos recibidos en el servidor:', data);
+    const connection = await db.getConnection();
 
-    const result = await db.query(
+    const result = await connection.query(
       'UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, categoria_id = ?, imagen = ? WHERE id = ?',
       [data.nombre, data.descripcion, data.precio, data.categoria_id, data.imagen, data.id]
     );
+
+    connection.release();
 
     if ((result.affectedRows || result.rowCount) === 0) {
       return NextResponse.json(
@@ -80,8 +90,11 @@ export async function PUT(request) {
 export async function DELETE(request) {
   try {
     const { id } = await request.json();
+    const connection = await db.getConnection();
     
-    await db.query('DELETE FROM productos WHERE id = ?', [id]);
+    await connection.query('DELETE FROM productos WHERE id = ?', [id]);
+
+    connection.release();
 
     return NextResponse.json({ message: 'Producto eliminado exitosamente' });
   } catch (error) {

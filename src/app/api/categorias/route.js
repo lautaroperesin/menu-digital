@@ -3,7 +3,9 @@ import db from '../../../utils/db';
 
 export async function GET() {
   try {
-    const [categories] = await db.query('SELECT * FROM categorias');
+    const connection = await db.getConnection();
+    const [categories] = await connection.query('SELECT * FROM categorias');
+    connection.release(); 
     
     return NextResponse.json(categories, { status: 200 });
   } catch (error) {
