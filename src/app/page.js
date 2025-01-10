@@ -27,11 +27,9 @@ export default function Home() {
         <p>Descubrí todas las opciones que tenemos para vos.</p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {categorias.map((categoria) => (
-          <Link href={`/menu`} key={categoria.id}>
-          <button
-            className="p-6 bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow"
-          >
-            <h2 className="text-xl font-semibold">{categoria.nombre}</h2>
+        <Link href={`/menu?categoria=${categoria.id_categoria}`} key={categoria.id_categoria}>
+          <button className="p-6 bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow">
+          <h2 className="text-xl font-semibold">{categoria.nombre}</h2>
           </button>
         </Link>
         ))}

@@ -2,6 +2,8 @@
 import OrderCart from '@/components/OrderCart';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+
 
 export default function Home() {
   const [products, setProducts] = useState([]);
