@@ -18,14 +18,8 @@ export default function OrderManagement() {
                 console.log('Respuesta del servidor Socket.IO:', socketData);
                 
                 const socketIo = io({
-                    path: '/api/socketio',
-                    transports: ['polling', 'websocket'],
-                    reconnectionDelay: 1000,
-                    reconnection: true,
-                    reconnectionAttempts: 10,
-                    forceNew: true,
-                    timeout: 10000,
-                    autoConnect: false
+                  path: '/api/socketio',
+                  addTrailingSlash: false,
                 });
 
                 console.log('🚀 Socket.IO iniciado:', socketIo);

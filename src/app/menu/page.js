@@ -2,10 +2,10 @@
 import OrderCart from '@/components/OrderCart';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Menu() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const categoria = searchParams.get('categoria');
 
@@ -147,21 +147,23 @@ export default function Menu() {
           <nav className="mb-4 flex justify-center space-x-4 overflow-x rounded-3xl">
              <ul>
               <li>
+              <Link href="/menu">
                 <button
-                  onClick={() => router.push('/menu')}
                   className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg"
                 >
                   Todos
                 </button>
+              </Link>
               </li>
               {categories.map((category) => (
                 <li key={category.id}>
+                  <Link href={`/menu?categoria=${category.id}`}>
                   <button
-                    onClick={() => router.push(`/menu?categoria=${category.id}`)}
                     className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg"
                   >
                     {category.nombre}
                   </button>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -176,6 +178,7 @@ export default function Menu() {
           ))}
         </div>
 
+        {/* Carrito de compras */}
         <div className="lg:col-span-1">
           <OrderCart
             cartItems={carrito}
