@@ -1,0 +1,177 @@
+import Image from "next/image";
+import { useState, useEffect } from "react";
+
+export default function ProductForm({
+  initialProduct,
+  categories,
+  onSubmit,
+  onCancel,
+  isEditing = false,
+}) {
+  const [product, setProduct] = useState(initialProduct);
+  const [imagenPreview, setImagenPreview] = useState("");
+  const [subiendoImagen, setSubiendoImagen] = useState(false);
+
+  useEffect(() => {
+    setProduct(initialProduct || {});
+  }, [initialProduct]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setProduct((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImagenChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Mostrar preview
+    setImagenPreview(URL.createObjectURL(file));
+    setSubiendoImagen(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProduct(prev => ({
+          ...prev,
+          imagen: data.url
+        }));
+      } else {
+        alert('Error al subir la imagen');
+      }
+    } catch (error) {
+      alert('Error al subir la imagen');
+    } finally {
+      setSubiendoImagen(false);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(product);
+    setImagenPreview("");
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-lg mb-8 bg-white p-6 rounded-lg shadow"
+    >
+      <h2 className="text-xl font-bold mb-4">
+        {isEditing ? "Editar Producto" : "Agregar Nuevo Producto"}
+      </h2>
+
+      {/* Nombre */}
+      <div className="mb-4">
+        <label className="block mb-2">Nombre:</label>
+        <input
+          type="text"
+          name="nombre"
+          value={product.nombre || ""}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded"
+          required
+        />
+      </div>
+
+      {/* Descripción */}
+      <div className="mb-4">
+        <label className="block mb-2">Descripción:</label>
+        <input
+          type="text"
+          name="descripcion"
+          value={product.descripcion || ""}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded"
+          required
+        />
+      </div>
+
+      {/* Precio */}
+      <div className="mb-4">
+        <label className="block mb-2">Precio:</label>
+        <input
+          type="number"
+          name="precio"
+          value={product.precio || ""}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded"
+          required
+        />
+      </div>
+
+      {/* Categoría */}
+      <div className="mb-4">
+        <label className="block mb-2">Categoría:</label>
+        <select
+          name="categoria_id"
+          value={product.categoria_id || ""}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded"
+          required
+        >
+          <option value="">Seleccionar categoría</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.nombre}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Imagen */}
+      <div className="mb-4">
+        <label className="block mb-2">Imagen:</label>
+        <div className="flex flex-col gap-2">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImagenChange}
+            className="w-full p-2 border rounded"
+          />
+
+          {subiendoImagen && <div className="text-blue-500">Subiendo imagen...</div>}
+
+          {(imagenPreview || product.imagen) && (
+            <div className="relative w-full h-48">
+              <Image
+                src={imagenPreview || product.imagen}
+                alt="Preview"
+                fill
+                className="object-cover rounded"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Botones */}
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+        >
+          {isEditing ? "Guardar Cambios" : "Agregar Producto"}
+        </button>
+
+        {isEditing && onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+          >
+            Cancelar
+          </button>
+        )}
+      </div>
+    </form>
+  );
+}

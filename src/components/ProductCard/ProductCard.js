@@ -13,7 +13,6 @@ export default function ProductCard({ product, onAddToCart }) {
     <div>
       <div>
         <h3 className="product-title">{product.nombre}</h3>
-        <p className="product-category">{product.categoria}</p>
       </div>
       <p className="product-description">{product.descripcion}</p>
     </div>

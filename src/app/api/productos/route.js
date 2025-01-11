@@ -25,8 +25,6 @@ export async function POST(request) {
     const body = await request.json();
     const connection = await db.getConnection();
     const { nombre, precio, imagen, categoria_id, descripcion } = body;
-    
-    console.log('Datos recibidos:', body);
 
     if (!nombre || !precio || !imagen || !categoria_id || !descripcion) {
       return new Response(
@@ -50,6 +48,7 @@ export async function POST(request) {
       { status: 201, headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {
+    console.error('Error al agregar el producto:', error);
     return new Response(
       JSON.stringify({ error: 'Error al agregar el producto' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }

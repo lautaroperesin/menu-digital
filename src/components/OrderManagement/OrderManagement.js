@@ -140,6 +140,8 @@ export default function OrderManagement() {
 
     const completedOrders = orders.filter(order => order.estado === 'completado');
 
+    const pendingOrders = orders.filter(order => order.estado === 'pendiente' || order.estado === 'en-proceso');
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -160,7 +162,7 @@ export default function OrderManagement() {
                 <div>
                     <div className="h-[600px] pr-4">
                         <div className="bg-yellow-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {orders.map((order, index) => (
+                            {pendingOrders.map((order, index) => (
                                 <div key={`${order.id}-${index}`} className="relative">
                                     <header>
                                         <div className="flex justify-between items-center">
@@ -188,7 +190,7 @@ export default function OrderManagement() {
                                                 <span className="font-bold">Total</span>
                                                 <div className="flex items-center gap-1">
                                                     <p className="h-4 w-4" />
-                                                    <span className="font-bold">{order.total}</span>
+                                                    <span className="font-bold">${order.total}</span>
                                                 </div>
                                             </div>
                                             <div className="pt-4 border-t">
@@ -243,7 +245,7 @@ export default function OrderManagement() {
                                             <span className="font-bold">Total</span>
                                             <div className="flex items-center gap-1">
                                                 <p className="h-4 w-4" />
-                                                <span className="font-bold">{order.total}</span>
+                                                <span className="font-bold">${order.total}</span>
                                             </div>
                                         </div>
                                     </div>
