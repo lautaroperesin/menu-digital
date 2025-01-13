@@ -11,6 +11,8 @@ export default function Menu() {
 
   const [products, setProducts] = useState([]);
   const [productosFiltrados, setProductosFiltrados] = useState([]);
+  const [mesas, setMesas] = useState([]);
+  const [mesaId, setMesaId] = useState(null);
   const [categories, setCategories] = useState([]);
   const [carrito, setCarrito] = useState([]);
   const [pedidoExitoso, setPedidoExitoso] = useState(false);
@@ -36,8 +38,18 @@ export default function Menu() {
       }
     };
 
+    const fetchMesas = async () => {
+      try {
+        const res = await fetch('/api/mesas');
+        const data = await res.json();
+        setMesas(data);
+      } catch (error) {
+        console.error('Error al cargar mesas:', error);
+      }
+    };
+
     const fetchData = async () => {
-      await Promise.all([fetchProducts(), fetchCategories()]);
+      await Promise.all([fetchProducts(), fetchCategories(), fetchMesas()]);
     };
 
     fetchData();
@@ -94,6 +106,10 @@ export default function Menu() {
     setCarrito(carrito.filter(item => item.id !== productoId));
   };
 
+  const onClickMesa = (mesaId) => {
+    setMesaId(mesaId);
+  }
+
   const realizarPedido = async () => {
     const total = carrito.reduce((total, item) => {
       const itemSubtotal = parseFloat(item.subtotal) || 0;
@@ -102,7 +118,7 @@ export default function Menu() {
 
     try {
       const pedido = {
-        mesa_id: 1,
+        mesa_id: mesaId,
         estado: 'pendiente',
         total: total,
         detalle_pedidos: carrito.map(item => ({
@@ -129,6 +145,7 @@ export default function Menu() {
 
       if (response.ok) {
         console.log('Pedido realizado con éxito');
+        alert('Pedido realizado con éxito');
         setPedidoExitoso(true);
         setCarrito([]);
         setTimeout(() => setPedidoExitoso(false), 3000);
@@ -182,6 +199,8 @@ export default function Menu() {
         <div className="lg:col-span-1">
           <OrderCart
             cartItems={carrito}
+            mesas={mesas}
+            onClickMesa={onClickMesa}
             onIncreaseQuantity={aumentarCantidad}
             onDecreaseQuantity={disminuirCantidad}
             onRemoveItem={eliminarDelCarrito}

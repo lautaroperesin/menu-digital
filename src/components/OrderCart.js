@@ -1,9 +1,15 @@
-export default function OrderCart({ cartItems, 
+import React, { useState } from "react";
+
+export default function OrderCart({ cartItems,
+    mesas,
+    onClickMesa,
     onIncreaseQuantity, 
     onDecreaseQuantity, 
     onRemoveItem, 
     onSubmitOrder,
     orderSuccess }) {
+        const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
+
         const calculateTotal = () => {
             return cartItems.reduce((total, item) => {
                 const itemSubtotal = parseFloat(item.subtotal);
@@ -11,8 +17,13 @@ export default function OrderCart({ cartItems,
             }, 0);
         };
 
+        const handleClick = (id) => {
+            setMesaSeleccionada(id);
+            onClickMesa(id);
+          };
+
     return(
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 sticky top-0 z-50 bg-white">
             {orderSuccess && (
                 <div className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4 bg-green-500 text-white">
                 Pedido realizado con éxito
@@ -65,6 +76,19 @@ export default function OrderCart({ cartItems,
                 </div>
                 )}
             </div>
+            <div className="flex items-center gap-2 p-2 border rounded">
+                {mesas.map((mesa) => (
+                    <button
+                    key={mesa.id}
+                    className={`p-2 rounded-lg ${
+                        mesaSeleccionada === mesa.id ? "bg-yellow-500" : "bg-gray-200"
+                      } hover:bg-gray-300`}
+                    onClick={() => handleClick(mesa.id)}
+                    >
+                    {mesa.nombre_mesa}
+                    </button>
+                ))}
+            </div>
             <div className="flex flex-col gap-4">
                 <div className="w-full flex justify-between items-center">
                 <span className="font-bold">Total:</span>
@@ -73,7 +97,7 @@ export default function OrderCart({ cartItems,
                 <button
                 className="w-full bg-yellow-500 text-black font-semibold py-2 rounded disabled:opacity-50 hover:bg-yellow-600"
                 size="lg"
-                disabled={cartItems.length === 0}
+                disabled={cartItems.length === 0 || mesaSeleccionada === null}
                 onClick={onSubmitOrder}
                 >
                 Realizar Pedido

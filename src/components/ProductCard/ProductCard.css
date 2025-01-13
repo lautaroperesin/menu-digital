@@ -19,8 +19,9 @@
 
 .product-image {
   width: 100%;
-  height: 192px; /* 48 * 4px = 12rem = 192px */
-  object-fit: cover;
+  max-height: 192px;
+  height: auto;
+  object-fit: contain;
 }
 
 /* Título */
