@@ -85,7 +85,7 @@ export default function OrderCart({ cartItems,
                 key={mesa.id}
                 className={`px-4 py-2 text-sm font-bold rounded-md transition-colors duration-300 ${
                     mesaSeleccionada === mesa.id
-                    ? "bg-green-500 text-white"
+                    ? "bg-orange-200 text-white"
                     : "bg-orange-200 text-gray-700 hover:bg-orange-400 hover:text-white"
                 }`}
                 onClick={() => handleClick(mesa.id)}
