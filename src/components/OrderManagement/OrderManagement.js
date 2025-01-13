@@ -8,7 +8,7 @@ export default function OrderManagement() {
     const [loading, setLoading] = useState(true);
     const [socket, setSocket] = useState(null);
 
-    useEffect(() => {
+/*     useEffect(() => {
         const initSocket = async () => {
             try {
                 console.log('🔄 Iniciando conexión Socket.IO...');
@@ -68,7 +68,7 @@ export default function OrderManagement() {
         };
     
         initSocket();
-      }, []);
+      }, []); */
 
     // Cargar pedidos iniciales
     useEffect(() => {

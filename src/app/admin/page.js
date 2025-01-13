@@ -93,21 +93,24 @@ export default function Admin() {
       <h1 className="text-3xl font-bold my-6">Panel de Administración</h1>
       <button onClick={handleLogout} className='p-3 mb-4 bg-red-600 rounded-full hover:bg-red-800'>Cerrar Sesión</button>
 
-      <ProductForm 
-        initialProduct={editProduct || {}}
-        categories={categories}
-        onSubmit={handleSubmit}
-        onCancel={handleCancelEdit}
-        isEditing={!!editProduct}
-      />
+      <OrderManagement />
 
-      {/* <OrderManagement /> */}
+      <div>
+      <h2 className="text-2xl font-bold my-6">Gestión de Productos</h2>
+        <ProductForm 
+          initialProduct={editProduct || {}}
+          categories={categories}
+          onSubmit={handleSubmit}
+          onCancel={handleCancelEdit}
+          isEditing={!!editProduct}
+        />
 
-      <ProductsTable
-       products={products}
-       categories={categories} 
-       onEdit={(product) => setEditProduct(product)}
-       onDelete={handleDelete} />
+        <ProductsTable
+        products={products}
+        categories={categories} 
+        onEdit={(product) => setEditProduct(product)}
+        onDelete={handleDelete} />
+       </div>
     </div>
   );
 }
