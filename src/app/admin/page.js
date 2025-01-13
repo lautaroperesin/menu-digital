@@ -34,7 +34,6 @@ export default function Admin() {
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-3xl font-bold my-6">Panel de Administración</h1>
-      <button onClick={handleLogout} className='p-3 mb-4 bg-red-600 rounded-full hover:bg-red-800'>Cerrar Sesión</button>
 
       <Link href="/admin/pedidos">
       <button className='p-3 mb-4 bg-yellow-500 rounded-full hover:bg-yellow-800'>Gestión de pedidos</button>
@@ -43,6 +42,8 @@ export default function Admin() {
       <Link href="/admin/productos">
       <button className='p-3 mb-4 bg-yellow-500 rounded-full hover:bg-yellow-800'>Gestión de productos</button>
       </Link>
+
+      <button onClick={handleLogout} className='p-3 mb-4 bg-red-600 rounded-full hover:bg-red-800'>Cerrar Sesión</button>
     </div>
   );
 }

@@ -25,15 +25,13 @@ export default function Home() {
         />
         <h1>¡Bienvenidos a Nuestra Web!</h1>
         <p>Descubrí todas las opciones que tenemos para vos.</p>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {categorias.map((categoria) => (
         <Link href={`/menu?categoria=${categoria.id}`} key={categoria.id}>
           <button className="p-6 bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow">
-          <h2 className="text-xl font-semibold">{categoria.nombre}</h2>
+          {categoria.nombre}
           </button>
         </Link>
         ))}
-      </div>
       </div>
 
       {/* Footer */}

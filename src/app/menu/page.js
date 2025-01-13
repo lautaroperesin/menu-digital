@@ -158,10 +158,10 @@ export default function Menu() {
   return (
     <>
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold my-6">NUESTRO MENÚ</h1>
+        <h1 className="text-3xl font-bold my-6 text-center">NUESTRO MENÚ</h1>
 
         {/* Filtro de categorías */}
-          <nav className="mb-4 flex justify-center space-x-4 overflow-x rounded-3xl">
+          <nav className="navbar-categorias">
              <ul>
               <li>
               <Link href="/menu">
