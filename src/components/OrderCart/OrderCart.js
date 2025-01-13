@@ -31,44 +31,45 @@ export default function OrderCart({ cartItems,
             )}
             
             <div className="col-span-1">
-                <h2 className="flex items-center gap-2">
+            <h2 className="flex items-center gap-2 text-lg font-semibold text-gray-800 mb-4">
                 Pedido Actual
-                </h2>
-            <div className="flex items-center justify-between gap-2 p-2 border rounded">
+            </h2>
+            <div className="p-4 border rounded-lg bg-gray-50 shadow-sm">
                 {cartItems.length === 0 ? (
-                <p className="text-gray-500 text-center">No hay productos seleccionados</p>
+                <p className="text-gray-500 text-center italic">No hay productos seleccionados</p>
                 ) : (
-                <div className="space-y-4">
+                <div className="space-y-3">
                     {cartItems.map((item) => (
-                    <div key={item.id} className="flex items-center justify-between gap-2 p-2 border rounded">
+                    <div
+                        key={item.id}
+                        className="flex items-center justify-between gap-3 p-3 bg-white rounded-md shadow hover:shadow-md transition-shadow"
+                    >
                         <div>
-                        <h3 className="font-medium">{item.nombre}</h3>
+                        <h3 className="font-medium text-gray-900">{item.nombre}</h3>
                         <p className="text-sm text-gray-600">
-                            ${item.precio} x {item.cantidad} = ${item.subtotal}
+                            ${item.precio} x {item.cantidad} ={" "}
+                            <span className="font-semibold text-gray-800">${item.subtotal}</span>
                         </p>
                         </div>
                         <div className="flex items-center gap-2">
                         <button
-                            size="sm"
-                            variant="outline"
+                            className="w-8 h-8 flex items-center justify-center text-red-600 border border-red-600 rounded-full hover:bg-red-600 hover:text-white transition-colors"
                             onClick={() => onDecreaseQuantity(item.id)}
                         >
-                            <span className="w-4 h-4 text-red-600">-</span>
+                            -
                         </button>
-                        <p>{item.cantidad}</p>
+                        <p className="text-sm font-medium text-gray-800">{item.cantidad}</p>
                         <button
-                            size="sm"
-                            variant="outline"
+                            className="w-8 h-8 flex items-center justify-center text-green-600 border border-green-600 rounded-full hover:bg-green-600 hover:text-white transition-colors"
                             onClick={() => onIncreaseQuantity(item)}
                         >
-                            <span className="w-4 h-4 text-green-600">+</span>
+                            +
                         </button>
                         <button
-                            size="sm"
-                            variant="destructive"
+                            className="w-8 h-8 flex items-center justify-center text-white bg-red-500 rounded-full hover:bg-red-600 transition-colors"
                             onClick={() => onRemoveItem(item.id)}
                         >
-                            <span className="w-4 h-4 text-red-800">Eliminar</span>
+                            ✖
                         </button>
                         </div>
                     </div>
@@ -76,19 +77,24 @@ export default function OrderCart({ cartItems,
                 </div>
                 )}
             </div>
-            <div className="flex items-center gap-2 p-2 border rounded">
-                {mesas.map((mesa) => (
-                    <button
-                    key={mesa.id}
-                    className={`p-2 rounded-lg ${
-                        mesaSeleccionada === mesa.id ? "bg-yellow-500" : "bg-gray-200"
-                      } hover:bg-gray-300`}
-                    onClick={() => handleClick(mesa.id)}
-                    >
-                    {mesa.nombre_mesa}
-                    </button>
-                ))}
             </div>
+
+            <div className="mesas flex flex-wrap justify-center gap-3 p-4 bg-gray-100 rounded-md shadow-md">
+            {mesas.map((mesa) => (
+                <button
+                key={mesa.id}
+                className={`px-4 py-2 text-sm font-bold rounded-md transition-colors duration-300 ${
+                    mesaSeleccionada === mesa.id
+                    ? "bg-green-500 text-white"
+                    : "bg-orange-200 text-gray-700 hover:bg-orange-400 hover:text-white"
+                }`}
+                onClick={() => handleClick(mesa.id)}
+                >
+                {mesa.nombre_mesa}
+                </button>
+            ))}
+            </div>
+
             <div className="flex flex-col gap-4">
                 <div className="w-full flex justify-between items-center">
                 <span className="font-bold">Total:</span>
@@ -103,7 +109,6 @@ export default function OrderCart({ cartItems,
                 Realizar Pedido
                 </button>
             </div>
-        </div>
         </div>
     );
 }

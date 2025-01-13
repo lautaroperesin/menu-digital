@@ -1,5 +1,5 @@
 'use client';
-import OrderCart from '@/components/OrderCart';
+import OrderCart from '@/components/OrderCart/OrderCart';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
