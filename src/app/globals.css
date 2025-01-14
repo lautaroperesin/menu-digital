@@ -37,6 +37,8 @@ body {
 }
 
 .nav-link {
+  display: flex;
+  align-items: center;
   text-decoration: none;
   color: #fff;
   font-size: 1rem;
@@ -46,9 +48,8 @@ body {
   transition: var(--background) 0.3s;
 }
 
-.nav-link i {
-  margin-right: 5px;
-  font-size: 1.2rem;
+.nav-link span {
+  margin-left: 5px;
 }
 
 .nav-link:hover {
