@@ -3,7 +3,7 @@ import OrderCart from '@/components/OrderCart/OrderCart';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
+import CategoriesNavBar from '@/components/CategoriesNavBar/CategoriesNavBar';
 
 export default function Menu() {
   const searchParams = useSearchParams();
@@ -13,7 +13,6 @@ export default function Menu() {
   const [productosFiltrados, setProductosFiltrados] = useState([]);
   const [mesas, setMesas] = useState([]);
   const [mesaId, setMesaId] = useState(null);
-  const [categories, setCategories] = useState([]);
   const [carrito, setCarrito] = useState([]);
   const [pedidoExitoso, setPedidoExitoso] = useState(false);
 
@@ -28,16 +27,6 @@ export default function Menu() {
       }
     };
 
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch('/api/categorias');
-        const data = await res.json();
-        setCategories(data);
-      } catch (error) {
-        console.error('Error al cargar categorías:', error);
-      }
-    };
-
     const fetchMesas = async () => {
       try {
         const res = await fetch('/api/mesas');
@@ -49,7 +38,7 @@ export default function Menu() {
     };
 
     const fetchData = async () => {
-      await Promise.all([fetchProducts(), fetchCategories(), fetchMesas()]);
+      await Promise.all([fetchProducts(), fetchMesas()]);
     };
 
     fetchData();
@@ -160,38 +149,13 @@ export default function Menu() {
       <div className="container mx-auto px-4">
         <h1 className="text-3xl font-bold my-6 text-center">NUESTRO MENÚ</h1>
 
-        {/* Filtro de categorías */}
-          <nav className="navbar-categorias">
-             <ul>
-              <li>
-              <Link href="/menu">
-                <button
-                  className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg"
-                >
-                  Todos
-                </button>
-              </Link>
-              </li>
-              {categories.map((category) => (
-                <li key={category.id}>
-                  <Link href={`/menu?categoria=${category.id}`}>
-                  <button
-                    className="p-2 bg-gray-200 hover:bg-gray-300 rounded-lg"
-                  >
-                    {category.nombre}
-                  </button>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+        {/* Barra de navegación de categorias */ }
+        <CategoriesNavBar />
 
         {/* Productos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {productosFiltrados.map((product) => (
-            <div key={product.id}>
-              <ProductCard product={product} onAddToCart={agregarAlCarrito} />
-            </div>
+              <ProductCard key={product.id} product={product} onAddToCart={agregarAlCarrito} />
           ))}
         </div>
 

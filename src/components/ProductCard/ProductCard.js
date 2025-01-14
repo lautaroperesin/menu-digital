@@ -11,9 +11,7 @@ export default function ProductCard({ product, onAddToCart }) {
       />
     </div>
     <div>
-      <div>
-        <h3 className="product-title">{product.nombre}</h3>
-      </div>
+      <h3 className="product-title">{product.nombre}</h3>
       <p className="product-description">{product.descripcion}</p>
     </div>
     <div>

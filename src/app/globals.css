@@ -54,12 +54,8 @@ body {
 .nav-link:hover {
   background-color: #333;
   color: #ff9800;
+  transition: background-color 0.4s, color 0.3s;
 }
-
-.nav-link:active {
-  transform: scale(0.95);
-}
-
 
 /*PAGE.JS*/
 /* Sección principal */
@@ -131,55 +127,9 @@ body {
 }
 
 .presentation button:hover {
-  background-color: rgb(202 138 4);
-  color: #fff;
+  background-color: #333;
+  color: #ff9800;
   transform: scale(1.1);
-  box-shadow: 0 0 25px rgba(255, 152, 0, 1);
-}
-
-
-/* Estilo para el filtro de categorías */
-.navbar-categorias {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  overflow-x: auto;
-  border-radius: 40px;
-  padding: 10px;
-  background-color: #ff9500be;
-  flex-wrap: wrap;
-  margin-bottom: 15px;
-}
-
-/* Lista */
-ul {
-  display: flex;
-  list-style-type: none; /* Elimina los puntos de la lista */
-  padding: 0;
-  margin: 0;
-  flex-wrap: wrap; /* Los botones se envuelven en varias filas si es necesario */
-  justify-content: center; /* Centra los botones en el contenedor */
-}
-
-/* Elementos de la lista */
-li {
-  margin-right: 10px; /* Espacio entre los botones */
-  margin-bottom: 10px; /* Espacio entre filas */
-}
-
-/* Estilo de los botones */
-button {
-  padding: 8px 16px; /* Espaciado dentro del botón */
-  background-color: #e7dddd; /* Fondo gris claro */
-  color: #000000; /* Texto gris oscuro */
-  border: none; /* Elimina bordes */
-  border-radius: 8px; /* Bordes redondeados */
-  cursor: pointer; /* Cambia el cursor al pasar por encima */
-  transition: background-color 0.3s ease; /* Efecto suave al pasar el ratón */
-}
-
-button:hover {
-  background-color: #ffffff; /* Fondo más oscuro al pasar el ratón */
 }
 
 /*SECTION NOSOTROS*/
@@ -246,9 +196,7 @@ button:hover {
   margin-top: 20px;
   text-align: left;
   display: inline-block;
-  max-width: 400px;
   width: 100%;
-  color: #ff9800;
   border-bottom: #ff9800;
 }
 
@@ -336,15 +284,6 @@ iframe {
 }
 
 
-/*----PANEL ADMINISTRATIVO---*/
-
-/* Personalización adicional */
-.container {
-  background-color: #f9fafb; /* Fondo suave */
-  padding: 2rem;
-  border-radius: 8px;
-}
-
 /* Formulario */
 form {
   background-color: #ffffff;
@@ -386,33 +325,6 @@ input[type='text']:focus {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
   border-color: #3b82f6;
 }
-
-/* Selects */
-select {
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-select:focus {
-  border-color: #3b82f6;
-  background-color: #eff6ff;
-}
-
-/* Botones */
-button {
-  cursor: pointer;
-  border: none;
-  font-weight: 600;
-}
-
-button.bg-blue-500:hover {
-  background-color: #2563eb;
-}
-
-button.bg-gray-500:hover {
-  background-color: #4b5563;
-}
-
-
 
 /*-----------FOOTER-------------*/
 

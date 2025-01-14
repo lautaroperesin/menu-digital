@@ -27,7 +27,7 @@ export default function Home() {
         <p>Descubrí todas las opciones que tenemos para vos.</p>
         {categorias.map((categoria) => (
         <Link href={`/menu?categoria=${categoria.id}`} key={categoria.id}>
-          <button className="p-6 bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow">
+          <button>
           {categoria.nombre}
           </button>
         </Link>
