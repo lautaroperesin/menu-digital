@@ -11,7 +11,14 @@ const Login = ({ onLoginSuccess }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      // Iniciar sesión con correo y contraseña en Firebase
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      
+      // Obtener el token ID
+      const idToken = await userCredential.user.getIdToken();
+      
+      await handleAuthToken(idToken);
+
       onLoginSuccess();
     } catch (error) {
       setError("Credenciales incorrectas. Intenta nuevamente.");

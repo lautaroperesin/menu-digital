@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import ProductForm from "@/components/ProductForm";
 import ProductsTable from "@/components/ProductsTable/ProductsTable";
 
-export default function AdminProductosPage() {
+export default function AdminProductsPage() {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [editProduct, setEditProduct] = useState(null);
