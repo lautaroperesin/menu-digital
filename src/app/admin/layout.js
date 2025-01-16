@@ -6,7 +6,7 @@ import { signOutUser } from '@/utils/auth';
 import { auth } from '@/utils/firebaseConfig';
 import Login from '@/components/Login/Login';
 import { useRouter } from 'next/navigation';
-import Sidebar from '@/components/SideBar';
+import Sidebar from '@/components/Sidebar';
 
 export default function AdminLayout({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

@@ -1,7 +1,7 @@
 'use client';
-import "./globals.css";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { BsTwitter, BsInstagram, BsFacebook } from "react-icons/bs";
 
 export default function Home() {
   const [categorias, setCategorias] = useState([]);
@@ -39,13 +39,19 @@ export default function Home() {
         <p>&copy; 2024 CMS Equipamientos - Desarrolladores. Todos los derechos reservados.</p>
         <div className="social-icons">
           <Link href="https://facebook.com" target="_blank">
-            <i className="fab fa-facebook"></i>
+            <i className="fab fa-facebook">
+              <BsFacebook />
+            </i>
           </Link>
           <Link href="https://twitter.com" target="_blank">
-            <i className="fab fa-twitter"></i>
+            <i className="fab fa-twitter">
+              <BsTwitter />
+            </i>
           </Link>
           <Link href="https://instagram.com" target="_blank">
-            <i className="fab fa-instagram"></i>
+            <i className="fab fa-instagram">
+              <BsInstagram />
+            </i>
           </Link>
         </div>
       </footer>

@@ -68,7 +68,7 @@ export default function AdminProductsPage() {
 
   return (
     <div>
-        <h1>Gestión de productos</h1>
+        <h1 className='font-bold text-center bg-yellow-500 mb-1'>Gestión de productos</h1>
 
       <ProductForm 
         initialProduct={editProduct || {}}
