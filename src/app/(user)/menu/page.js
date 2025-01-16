@@ -146,7 +146,7 @@ export default function Menu() {
 
   return (
     <>
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 pb-5">
         <h1 className="text-3xl font-bold my-6 text-center">NUESTRO MENÚ</h1>
 
         {/* Barra de navegación de categorias */ }

@@ -47,7 +47,7 @@ export default function OrderCart({ cartItems,
           return (
             <>
               {orderSuccess && (
-                <div className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4 bg-green-500 text-white">
+                <div className="fixed top-16 left-0 right-0 z-50 flex justify-center p-4 bg-green-500 text-white">
                   Pedido realizado con éxito
                 </div>
               )}
@@ -128,8 +128,8 @@ export default function OrderCart({ cartItems,
                                 key={mesa.id}
                                 className={`px-4 py-2 text-sm font-bold rounded-md transition-colors duration-300 ${
                                   mesaSeleccionada === mesa.id
-                                    ? "bg-orange-200 text-white"
-                                    : "bg-orange-200 text-gray-700 hover:bg-orange-400 hover:text-white"
+                                    ? "bg-yellow-500 text-white"
+                                    : "bg-yellow-100 text-gray-700 hover:bg-yellow-500 hover:text-white"
                                 }`}
                                 onClick={() => handleClick(mesa.id)}
                               >

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import "./NavBar.css";
 import { AiFillHome } from "react-icons/ai";
 import { GiMeal } from "react-icons/gi";
 import { RiInformation2Fill } from "react-icons/ri";
