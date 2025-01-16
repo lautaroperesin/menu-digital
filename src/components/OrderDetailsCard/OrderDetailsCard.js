@@ -45,7 +45,7 @@ export default function OrderDetailsCard({ order, updateOrderStatus }) {
                         <span className="font-bold">${order.total}</span>
                     </div>
                 </div>
-                {order.estado === 'pendiente' && (
+                {(order.estado === 'pendiente' || order.estado === 'en-proceso') && (
                       <div className="pt-4 border-t">
                       <select
                           value={order.estado}

@@ -46,6 +46,7 @@ export default function Menu() {
 
   useEffect(() => {
     if (categoria) {
+      console.log('categoria', categoria);
       const filtrados = products.filter(
         (producto) => producto.categoria_id === parseInt(categoria)
       );
@@ -134,7 +135,6 @@ export default function Menu() {
 
       if (response.ok) {
         console.log('Pedido realizado con éxito');
-        alert('Pedido realizado con éxito');
         setPedidoExitoso(true);
         setCarrito([]);
         setTimeout(() => setPedidoExitoso(false), 3000);
@@ -146,7 +146,7 @@ export default function Menu() {
 
   return (
     <>
-      <div className="container mx-auto px-4 pb-5">
+      <div className="container mx-auto px-4 pb-16">
         <h1 className="text-3xl font-bold my-6 text-center">NUESTRO MENÚ</h1>
 
         {/* Barra de navegación de categorias */ }

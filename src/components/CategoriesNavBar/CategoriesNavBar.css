@@ -44,8 +44,7 @@
     color: #ff9800;
   }
 
-  /* Cambiar color cuando este activo*/
-    .category-button.active {
-        background-color: #333;
-        color: #ff9800;
-    }
+  .category-button:focus, .category-button:active {
+    background-color: #333;
+    color: #ff9800;
+  }

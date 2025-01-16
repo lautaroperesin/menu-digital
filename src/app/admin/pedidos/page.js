@@ -54,7 +54,9 @@ export default function AdminOrdersPage() {
 
     const completedOrders = orders.filter(order => order.estado === 'completado');
 
-    const pendingOrders = orders.filter(order => order.estado === 'pendiente' || order.estado === 'en-proceso');
+    const pendingOrders = orders.filter(order => order.estado === 'pendiente');
+
+    const inProcessOrders = orders.filter(order => order.estado === 'en-proceso');
 
     if (loading) {
       return (
@@ -68,9 +70,16 @@ export default function AdminOrdersPage() {
     <div>
       <h1 className="font-bold text-center bg-yellow-500 mb-1">Gestión de pedidos</h1>
       
-      <h2 className="font-bold mt-4 mb-3">Pedidos pendientes/en proceso</h2>
+      <h2 className="font-bold mt-4 mb-3">Pedidos pendientes</h2>
       <div className="bg-yellow-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {pendingOrders.map((order, index) => (
+          <OrderDetailsCard key={index} order={order} updateOrderStatus={updateOrderStatus} />
+        ))}
+      </div>
+
+      <h2 className="font-bold mt-4 mb-3">Pedidos en proceso</h2>
+      <div className="bg-yellow-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {inProcessOrders.map((order, index) => (
           <OrderDetailsCard key={index} order={order} updateOrderStatus={updateOrderStatus} />
         ))}
       </div>
