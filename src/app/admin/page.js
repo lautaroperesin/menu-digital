@@ -18,8 +18,7 @@ export default function AdminPanel() {
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
-        const data = await fetchDashboardData();
-        console.log('data:', data);
+        const data = await fetchDashboardData()
         setDashboardData(data);
       } catch (error) {
         console.error('Error loading dashboard data:', error);
@@ -28,11 +27,7 @@ export default function AdminPanel() {
 
     loadDashboardData();
   }, []);
-
-  useEffect(() => {
-    console.log('dashboardData actualizado:', dashboardData);
-  }, [dashboardData]);
-
+  
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Dashboard</h1>

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+/* import { NextResponse } from 'next/server'
 
 export function middleware(request) {
   const path = new URL(request.url).pathname
@@ -19,4 +19,4 @@ export function middleware(request) {
 
 export const config = {
   matcher: '/admin/:path*'
-}
+} */

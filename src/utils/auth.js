@@ -23,9 +23,9 @@ export async function handleAuthToken(idToken) {
 
 export async function signOutUser() {
   try {
-    await fetch('/api/auth/logout', {
+/*     await fetch('/api/auth/logout', {
       method: 'POST',
-    })
+    }) */
     await auth.signOut()
   } catch (error) {
     console.error('Error en signOutUser:', error)

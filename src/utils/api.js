@@ -10,16 +10,9 @@ export async function fetchDashboardData() {
   
       // Obtener pedidos pendientes
       const pendingOrders = orders.filter(order => order.estado === 'pendiente').length;
-
-      console.log('orders:', orders);
-      console.log('products:', products);
-
-      console.log('pendingOrders:', pendingOrders);
   
       // Total de productos
       const totalProducts = products.length;
-
-      console.log('totalProducts:', totalProducts);
   
       // Ingresos del día
       const today = new Date();

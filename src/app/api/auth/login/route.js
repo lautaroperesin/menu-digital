@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers'
+/* import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 export async function POST(request) {
@@ -30,4 +30,4 @@ export async function POST(request) {
       { status: 500 }
     )
   }
-}
+} */

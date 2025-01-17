@@ -12,16 +12,12 @@ const Login = ({ onLoginSuccess }) => {
     e.preventDefault();
     try {
       // Iniciar sesión con correo y contraseña en Firebase
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      
-      // Obtener el token ID
-      const idToken = await userCredential.user.getIdToken();
-      
-      await handleAuthToken(idToken);
+      await signInWithEmailAndPassword(auth, email, password);
 
       onLoginSuccess();
     } catch (error) {
       setError("Credenciales incorrectas. Intenta nuevamente.");
+      console.error("Error en login:", error);
     }
   };
 
