@@ -12,8 +12,29 @@ const Login = ({ onLoginSuccess }) => {
     e.preventDefault();
     try {
       // Iniciar sesión con correo y contraseña en Firebase
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      
+      // Obtiene el usuario autenticado
+      const user = userCredential.user;
 
+      // Obtiene el token de acceso
+      const idToken = await user.getIdToken();
+      
+      // Enviar el token al servidor para crear la cookie de sesión
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idToken }),
+      });
+
+      if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Error al iniciar sesión');
+      }
+
+      // Cambia el estado de la autenticacion a verdadero
       onLoginSuccess();
     } catch (error) {
       setError("Credenciales incorrectas. Intenta nuevamente.");

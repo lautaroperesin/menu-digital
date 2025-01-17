@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { signOutUser } from '@/utils/auth';
 import { auth } from '@/utils/firebaseConfig';
 import Login from '@/components/Login/Login';
 import { useRouter } from 'next/navigation';
@@ -19,6 +18,7 @@ export default function AdminLayout({ children }) {
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
+        router.push('/admin');
       }
       setLoading(false);
     });
@@ -26,9 +26,18 @@ export default function AdminLayout({ children }) {
   }, []);
 
   const handleLogout = async () => {
-    await signOutUser();
-    router.push('/admin');
-  };
+    try {
+      await fetch('/api/auth/logout',
+         { method: 'POST' }
+        );
+      await auth.signOut();
+      console.log('Sesión cerrada correctamente');
+      router.push('/admin');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      throw error;
+  }
+  }
 
   if (loading) {
     return (

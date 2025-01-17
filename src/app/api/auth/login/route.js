@@ -1,33 +1,27 @@
-/* import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { adminAuth } from '@/utils/firebaseAdminConfig';
+import { cookies } from 'next/headers';
 
 export async function POST(request) {
   try {
-    const { idToken } = await request.json()
+    const { idToken } = await request.json();
+    
     if (!idToken) {
-      return NextResponse.json(
-        { error: 'Token no proporcionado' },
-        { status: 400 }
-      )
+      return new Response('Token no proporcionado', { status: 400 });
     }
 
-    // Configurar la cookie de sesión
-    const expiresIn = 60 * 60 * 24 * 5 // 5 días en segundos
-    
-    cookies().set('session', idToken, {
+    const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 días
+
+    const sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn });
+
+    cookies().set('session', sessionCookie, {
+      maxAge: expiresIn,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: expiresIn,
-      path: '/',
-    })
+    });
 
-    return NextResponse.json({ status: 'success' })
+    return Response.json({ status: 'success' }, { status: 200 });
   } catch (error) {
-    console.error('Error en login:', error)
-    return NextResponse.json(
-      { error: 'Error interno del servidor' },
-      { status: 500 }
-    )
+    console.error('Error al crear la cookie de sesión:', error);
+    return Response.json({ error: error.message }, { status: 401 });
   }
-} */
+}

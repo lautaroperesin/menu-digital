@@ -1,7 +1,13 @@
-/* import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers';
 
 export async function POST() {
-  cookies().delete('session')
-  return NextResponse.json({ status: 'success' })
-} */
+  try {
+    const cookieStore = cookies(); // Accede a las cookies dinámicas
+    cookieStore.delete('session'); // Elimina la cookie de sesión
+
+    return new Response('Sesión cerrada correctamente', { status: 200 });
+  } catch (error) {
+    console.error('Error al cerrar sesión:', error);
+    return new Response('Error interno del servidor', { status: 500 });
+  }
+}
