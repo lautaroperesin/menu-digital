@@ -29,43 +29,46 @@ export default function AdminPanel() {
   }, []);
   
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+    <div className="space-y-12">
+      <h1 className="text-5xl font-extrabold text-gray-900 leading-tight">Dashboard</h1>
       
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
         <Link href="/admin/pedidos">
-        <StatCard 
-          title="Pedidos Pendientes" 
-          value={dashboardData.pendingOrders}
-          icon={<LuShoppingCart className="h-8 w-8" />} 
-        />
+          <StatCard 
+            title="Pedidos Pendientes" 
+            value={dashboardData.pendingOrders}
+            icon={<LuShoppingCart className="h-10 w-10 text-blue-600" />} 
+            className="bg-white shadow-xl p-8 rounded-xl hover:shadow-2xl transition-all duration-300 ease-out hover:bg-blue-50"
+          />
         </Link>
         <Link href="/admin/productos">
-        <StatCard 
-          title="Total Productos" 
-          value={dashboardData.totalProducts}
-          icon={<LuPackage2 className="h-8 w-8" />} 
-        />
+          <StatCard 
+            title="Total Productos" 
+            value={dashboardData.totalProducts}
+            icon={<LuPackage2 className="h-10 w-10 text-green-600" />} 
+            className="bg-white shadow-xl p-8 rounded-xl hover:shadow-2xl transition-all duration-300 ease-out hover:bg-green-50"
+          />
         </Link>
         <StatCard 
           title="Ingresos del Día" 
           value={`$${dashboardData.dailyIncome}`} 
-          icon={<FaDollarSign className="h-8 w-8" />} 
+          icon={<FaDollarSign className="h-10 w-10 text-yellow-600" />} 
+          className="bg-white shadow-xl p-8 rounded-xl hover:shadow-2xl transition-all duration-300 ease-out hover:bg-yellow-50"
         />
       </div>
-
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="bg-yellow-100 text-black">
-          <header>
-            <h3>Ventas de la Semana</h3>
+  
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="bg-white shadow-xl p-10 rounded-xl">
+          <header className="border-b border-gray-300 pb-6 mb-8">
+            <h3 className="text-2xl font-semibold text-gray-800">Ventas de la Semana</h3>
           </header>
           <div>
             <SalesChart />
           </div>
         </div>
-        <div className="bg-yellow-100 text-black">
-          <header>
-            <h3>Productos Más Vendidos</h3>
+        <div className="bg-white shadow-xl p-10 rounded-xl">
+          <header className="border-b border-gray-300 pb-6 mb-8">
+            <h3 className="text-2xl font-semibold text-gray-800">Productos Más Vendidos</h3>
           </header>
           <div>
             <TopProductsTable />
@@ -73,19 +76,17 @@ export default function AdminPanel() {
         </div>
       </div>
     </div>
-  )
-}
-
-function StatCard({ title, value, icon }) {
-  return (
-    <div className="hover:bg-yellow-200 transition duration-300">
-      <header className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <h3 className="text-sm font-medium">{title}</h3>
-        {icon}
-      </header>
-      <div className="flex flex-row items-center justify-between">
-        <div className="text-2xl font-bold">{value}</div>
+  );
+  
+  function StatCard({ title, value, icon, className }) {
+    return (
+      <div className={`hover:bg-gray-100 transition-all duration-300 ease-in-out ${className}`}>
+        <header className="flex items-center justify-between pb-4">
+          <h3 className="text-lg font-semibold text-gray-700">{title}</h3>
+          {icon}
+        </header>
+        <div className="text-4xl font-bold text-gray-900">{value}</div>
       </div>
-    </div>
-  )
+    );
   }
+   }
