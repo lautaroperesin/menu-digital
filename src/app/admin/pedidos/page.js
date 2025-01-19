@@ -68,7 +68,7 @@ export default function AdminOrdersPage() {
 
   return (
     <div>
-      <h1 className="font-bold text-center bg-yellow-500 mb-1">Gestión de pedidos</h1>
+      <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Gestión de Pedidos</h1>
       
       <h2 className="font-bold mt-4 mb-3">Pedidos pendientes</h2>
       <div className="bg-yellow-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
