@@ -46,7 +46,6 @@ export default function Menu() {
 
   useEffect(() => {
     if (categoria) {
-      console.log('categoria', categoria);
       const filtrados = products.filter(
         (producto) => producto.categoria_id === parseInt(categoria)
       );

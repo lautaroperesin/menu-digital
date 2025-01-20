@@ -1,29 +1,31 @@
-const salesData = [
-  { day: "Lun", sales: 650 },
-  { day: "Mar", sales: 590 },
-  { day: "Mié", sales: 800 },
-  { day: "Jue", sales: 810 },
-  { day: "Vie", sales: 1200 },
-  { day: "Sáb", sales: 1500 },
-  { day: "Dom", sales: 1300 },
-]
-
-export default function SalesChart() {
-  const maxSales = Math.max(...salesData.map(d => d.sales))
-
+export default function SalesChart({ weeklySales, weeklyTotal }) {
   return (
-    <div className="w-full h-64 flex items-end justify-between space-x-4">
-      {salesData.map((data, index) => (
-        <div key={index} className="flex flex-col items-center group">
-          <div 
-            className="w-10 bg-gradient-to-b from-yellow-400 to-yellow-600 rounded-t-xl shadow-md transition-all duration-300 ease-in-out transform group-hover:scale-105"
-            style={{ height: `${(data.sales / maxSales) * 100}%` }}
-          ></div>
-          <span className="text-xs mt-2 text-gray-600">{data.day}</span>
-          <span className="text-xs font-bold text-gray-800">{`$${data.sales}`}</span>
+    <div className="space-y-4">
+    {weeklySales?.map((day) => (
+      <div 
+        key={day.date} 
+        className="flex items-center justify-between border-b pb-2"
+      >
+        <div className="flex flex-col">
+          <span className="font-medium capitalize">
+            {day.dayName}
+          </span>
+          <span className="text-sm text-gray-500">
+            {new Date(day.date).toLocaleDateString()}
+          </span>
         </div>
-      ))}
+        <div className="text-lg font-semibold">
+          ${day.total}
+        </div>
+      </div>
+    ))}
+    <div className="flex items-center justify-between pt-4 border-t">
+      <span className="font-bold">Total Semanal</span>
+      <span className="text-xl font-bold text-green-600">
+        ${weeklyTotal}
+      </span>
     </div>
+  </div>
   );
   
 }

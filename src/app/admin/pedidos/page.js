@@ -52,7 +52,7 @@ export default function AdminOrdersPage() {
       }
     };
 
-    const completedOrders = orders.filter(order => order.estado === 'completado');
+    const completedOrders = orders.filter(order => order.estado === 'completado' && new Date(order.fecha_hora).toDateString() === new Date().toDateString());
 
     const pendingOrders = orders.filter(order => order.estado === 'pendiente');
 

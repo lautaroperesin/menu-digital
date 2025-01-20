@@ -12,7 +12,9 @@ export default function AdminPanel() {
   const [dashboardData, setDashboardData] = useState({
     pendingOrders: 0,
     totalProducts: 0,
-    dailyIncome: 0
+    dailyIncome: 0,
+    weeklySales: [],
+    weeklyTotal: 0
   });
 
   useEffect(() => {
@@ -63,12 +65,12 @@ export default function AdminPanel() {
             <h3 className="text-2xl font-semibold text-gray-800">Ventas de la Semana</h3>
           </header>
           <div>
-            <SalesChart />
+            <SalesChart weeklySales={dashboardData.weeklySales} weeklyTotal={dashboardData.weeklyTotal} />
           </div>
         </div>
         <div className="bg-white shadow-xl p-10 rounded-xl">
           <header className="border-b border-gray-300 pb-6 mb-8">
-            <h3 className="text-2xl font-semibold text-gray-800">Productos Más Vendidos</h3>
+            <h3 className="text-2xl font-semibold text-gray-800">Productos Más Vendidos de la Semana</h3>
           </header>
           <div>
             <TopProductsTable />
