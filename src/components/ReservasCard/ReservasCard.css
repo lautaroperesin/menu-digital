@@ -1,0 +1,40 @@
+.reservas-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .reservas-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .reserva-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .reserva-item:last-child {
+    border-bottom: none;
+  }
+  
+  .paginacion {
+    margin-top: 20px;
+  }
+  
+  .paginacion button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  
+  .paginacion button.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+  }
