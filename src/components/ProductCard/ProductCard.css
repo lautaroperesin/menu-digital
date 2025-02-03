@@ -1,76 +1,65 @@
 .product-card-container {
-  width: 300px;
-  background: linear-gradient(to bottom, #ffb44471, #ffc7742f);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 450px;
+  background: #f4f4f4;
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
-}
-
-/* Hover: Elevación */
-.product-card-container:hover {
-  transform: translateY(-4px);
-}
-
-.product-card-container:hover::before {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 .product-image {
-  width: 100%;
-  max-height: 192px;
-  height: auto;
-  object-fit: contain;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
-/* Título */
+.product-info {
+  flex-grow: 1;
+  padding: 0 10px;
+}
+
 .product-title {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
-  text-align: center;
-  letter-spacing: 0.5px;
-  text-transform: capitalize;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #495e35;
+  margin-bottom: 4px;
 }
 
-/* Descripción */
 .product-description {
-  color: #374151;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  line-height: 1.4;
-  text-align: center;
+  font-size: 0.8rem;
+  color: #6b6b6b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
-/* Precio */
+.product-description::after {
+  content: '\25BE';
+  font-size: 0.8rem;
+  margin-left: 4px;
+}
+
 .product-price {
-  color: #fbbf24; /* Amarillo */
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  text-align: center;
+  font-size: 1.0rem;
+  font-weight: bold;
+  color: #495e35;
 }
 
 .product-card-container button {
-  width: 100%;
-  background-color: #fbbf24; /* Amarillo */
-  color: #111827; /* Texto oscuro */
-  padding: 0.5rem 1rem;
+  background-color: #333;
+  color: white;
+  padding: 6px 12px;
   border: none;
-  border-radius: 0.375rem;
-  font-weight: 600;
+  font-size: 0.5rem;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  border-radius: 3px;
 }
 
 .product-card-container button:hover {
-  background-color: #f59e0b; /* Amarillo más oscuro */
+  background-color: #000;
 }
-
-.product-card-container button:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #fbbf24, 0 0 0 4px #1f2937;
-}
-

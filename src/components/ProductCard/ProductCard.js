@@ -19,7 +19,7 @@ export default function ProductCard({ product, onAddToCart }) {
     </div>
     <div>
       <button onClick={() => onAddToCart(product)}>
-        Agregar al pedido
+        AGREGAR
       </button>
     </div>
   </div>
