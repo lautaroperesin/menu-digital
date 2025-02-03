@@ -36,9 +36,9 @@ export default function Home() {
         </Link>
         
         {/* Botón para ir a la página de Pedidos */}
-        <Link href="/menu">
+        <Link href="/nosotros">
           <button className="menu-btn">
-            DEJANOS TU OPINIÓN
+            NOSOTROS
           </button>
         </Link>
       </div>

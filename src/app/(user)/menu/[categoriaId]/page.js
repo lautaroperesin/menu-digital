@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
 import ProductCard from "@/components/ProductCard/ProductCard";
 
 export default function CategoriaPage() {
@@ -29,10 +28,6 @@ export default function CategoriaPage() {
 
   return (
     <div className="p-6">
-       <Link href="/menu" className="text-blue-500 hover:underline mb-4 block">
-        ← Volver al Menú
-      </Link>
-
       <h1 className="text-2xl font-bold mb-4">Productos</h1>
         {productos.map((producto) => (
           <ProductCard producto={producto} key={producto.id} />
