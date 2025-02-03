@@ -25,6 +25,32 @@ export default function Home() {
         />
         <h1>¡Bienvenidos a Nuestra Web!</h1>
         <p>Descubrí todas las opciones que tenemos para vos.</p>
+
+        {/* Botón para ir a la página de menú */}
+        <Link href="/menu">
+          <button className="menu-btn">
+            MENÚ
+          </button>
+        </Link>
+        {/* Botón para ir a la página de Pedidos */}
+        <Link href="/menu">
+          <button className="menu-btn">
+            PEDIDOS
+          </button>
+        </Link>
+        {/* Botón para ir a la página de Pedidos */}
+        <Link href="/menu">
+          <button className="menu-btn">
+            RESERVAS
+          </button>
+        </Link>
+        {/* Botón para ir a la página de Pedidos */}
+        <Link href="/menu">
+          <button className="menu-btn">
+            DEJANOS TU OPINIÓN
+          </button>
+        </Link>
+
         {categorias.map((categoria) => (
         <Link href={`/menu?categoria=${categoria.id}`} key={categoria.id}>
           <button>
