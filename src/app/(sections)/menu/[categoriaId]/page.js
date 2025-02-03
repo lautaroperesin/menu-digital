@@ -28,7 +28,6 @@ export default function CategoriaPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Productos</h1>
         {productos.map((producto) => (
           <ProductCard producto={producto} key={producto.id} />
         ))}

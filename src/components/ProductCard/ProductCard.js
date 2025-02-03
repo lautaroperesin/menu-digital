@@ -1,6 +1,10 @@
 import './ProductCard.css';
+import { usePathname } from 'next/navigation';
 
 export default function ProductCard({ producto, onAddToCart }) {
+  const pathname = usePathname();
+  const isPedidosPage = pathname === '/pedidos';
+
   return (
     <div className="product-card-container">
       <img
@@ -15,6 +19,14 @@ export default function ProductCard({ producto, onAddToCart }) {
       <div className="product-price-button">
         <p className="product-price">${producto.precio}</p>
       </div>
+      {isPedidosPage && (
+        <button
+          className="add-button"
+          onClick={() => onAddToCart(producto)}
+        >
+          Agregar
+        </button>
+      )}
     </div>
   );
 }

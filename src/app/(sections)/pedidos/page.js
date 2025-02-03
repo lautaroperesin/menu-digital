@@ -111,15 +111,12 @@ export default function PedidosPage() {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-semibold text-gray-800">Pedidos</h1>
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <div className='p-6'>
         {productos.map(producto => (
-          <div key={producto.id} className="bg-white shadow-md p-4">
+          <div key={producto.id}>
             <ProductCard producto={producto} onAddToCart={agregarAlCarrito} />
           </div>
         ))}
-      </div>
       <div className="lg:col-span-1">
         <OrderCart
           cartItems={carrito}
