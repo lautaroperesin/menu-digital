@@ -1,20 +1,8 @@
 'use client';
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import { BsTwitter, BsInstagram, BsFacebook } from "react-icons/bs";
 
 export default function Home() {
-  const [categorias, setCategorias] = useState([]);
-
-  useEffect(() => {
-    const fetchCategorias = async () => {
-      const response = await fetch('/api/categorias');
-      const data = await response.json();
-      setCategorias(data);
-    };
-    fetchCategorias();
-  }, []);
-
   return (
     <section className="home">
       <div className="presentation">
@@ -26,38 +14,33 @@ export default function Home() {
         <h1>¡Bienvenidos a Nuestra Web!</h1>
         <p>Descubrí todas las opciones que tenemos para vos.</p>
 
-        {/* Botón para ir a la página de menú */}
+        {/* Botón para ir a la página de Menú */}
         <Link href="/menu">
           <button className="menu-btn">
             MENÚ
           </button>
         </Link>
+
         {/* Botón para ir a la página de Pedidos */}
-        <Link href="/menu">
+        <Link href="/pedidos">
           <button className="menu-btn">
             PEDIDOS
           </button>
         </Link>
-        {/* Botón para ir a la página de Pedidos */}
-        <Link href="/menu">
+
+        {/* Botón para ir a la página de Reservas */}
+        <Link href="/reservas">
           <button className="menu-btn">
             RESERVAS
           </button>
         </Link>
+        
         {/* Botón para ir a la página de Pedidos */}
         <Link href="/menu">
           <button className="menu-btn">
             DEJANOS TU OPINIÓN
           </button>
         </Link>
-
-        {categorias.map((categoria) => (
-        <Link href={`/menu?categoria=${categoria.id}`} key={categoria.id}>
-          <button>
-          {categoria.nombre}
-          </button>
-        </Link>
-        ))}
       </div>
 
       {/* Footer */}
