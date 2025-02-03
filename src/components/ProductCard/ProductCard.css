@@ -1,26 +1,30 @@
 .product-card-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 450px;
+  width: 100%;
   background: #f4f4f4;
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 10px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  margin-bottom: 10px;
 }
 
 .product-image {
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   object-fit: cover;
   border-radius: 5px;
+  margin-right: 10px;
 }
 
 .product-info {
   flex-grow: 1;
-  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .product-title {
@@ -34,32 +38,59 @@
   font-size: 0.8rem;
   color: #6b6b6b;
   cursor: pointer;
-  display: flex;
-  align-items: center;
 }
 
-.product-description::after {
-  content: '\25BE';
-  font-size: 0.8rem;
-  margin-left: 4px;
+.product-price-button {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 }
 
 .product-price {
-  font-size: 1.0rem;
+  font-size: 1.2rem;
   font-weight: bold;
   color: #495e35;
+  margin-right: 10px;
 }
 
-.product-card-container button {
+.add-button {
   background-color: #333;
   color: white;
   padding: 6px 12px;
   border: none;
-  font-size: 0.5rem;
+  font-size: 0.9rem;
   cursor: pointer;
   border-radius: 3px;
 }
 
-.product-card-container button:hover {
+.add-button:hover {
   background-color: #000;
+}
+
+/* Media Query para pantallas de celular */
+@media (max-width: 768px) {
+  .product-card-container {
+    flex-direction: column; /* Cambiar a columna en pantallas pequeñas */
+    align-items: center; /* Centrar horizontalmente */
+  }
+
+  .product-image {
+    margin-right: 0; /* Eliminar margen a la derecha de la imagen */
+    margin-bottom: 10px; /* Añadir margen inferior a la imagen */
+  }
+
+  .product-info {
+    align-items: center; /* Centrar la información del producto */
+  }
+
+  .product-price-button {
+    margin-left: 0; /* Eliminar margen a la izquierda del precio y botón */
+    flex-direction: column; /* Cambiar a columna el precio y botón */
+    align-items: center; /* Centrar horizontalmente el precio y botón */
+  }
+
+  .product-price {
+    margin-right: 0; /* Eliminar margen a la derecha del precio */
+    margin-bottom: 5px; /* Añadir margen inferior al precio */
+  }
 }
