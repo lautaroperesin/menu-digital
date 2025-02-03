@@ -1,50 +1,75 @@
+/* Estilos generales del navbar */
 .categories-nav-bar {
-    display: flex;
-    justify-content: start;
-    gap: 10px;
-    overflow-x: auto;
-    border-radius: 10px;
-    padding: 20px;
-    background-color: #ff9500be;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-  }
-  
-  /* Lista */
-  ul {
-    display: flex;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    flex-wrap: nowrap;
-    justify-content: center;
-    flex-direction: row;
-    scrollbar-width: none;
-  }
-  
-  /* Elementos de la lista */
-  li {
-    margin-right: 10px;
-  }
-  
-  /* Estilo de los botones */
-  .category-button {
-    padding: 8px 16px;
-    font-weight: bold;
-    background-color: #e7dddd;
-    color: #000000;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .category-button:hover {
-    background-color: #333;
-    color: #ff9800;
-  }
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-  .category-button:focus, .category-button:active {
-    background-color: #333;
-    color: #ff9800;
-  }
+/* Botón del menú hamburguesa */
+.menu-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.menu-toggle:hover {
+  transform: scale(1.1);
+}
+
+/* Estilos del menú desplegable */
+.menu-list {
+  display: none;
+  flex-direction: column;
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  background: #ff9500f6;
+  border-radius: 8px;
+  position: absolute;
+  top: 45px;
+  left: 0;
+  width: 220px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Mostrar el menú cuando está abierto */
+.menu-list.open {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Botones de categorías */
+.category-button {
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Efecto hover para los botones */
+.category-button:hover {
+  background: #f7f7f7;
+  color: #000;
+}
+
+/* Agregar un separador entre los elementos */
+.menu-list li:not(:last-child) {
+  border-bottom: 1px solid #e0e0e0;
+}
