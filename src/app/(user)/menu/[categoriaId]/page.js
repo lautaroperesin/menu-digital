@@ -34,13 +34,9 @@ export default function CategoriaPage() {
       </Link>
 
       <h1 className="text-2xl font-bold mb-4">Productos</h1>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {productos.map((producto) => (
-          <div key={producto.id} className="bg-white p-4 rounded-md shadow-md">
-          <ProductCard producto={producto} />
-          </div>
+          <ProductCard producto={producto} key={producto.id} />
         ))}
-      </div>
     </div>
   );
 }

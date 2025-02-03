@@ -1,58 +1,26 @@
-{/* <div className="lg:col-span-1">
-<OrderCart
-  cartItems={carrito}
-  mesas={mesas}
-  onClickMesa={onClickMesa}
-  onIncreaseQuantity={aumentarCantidad}
-  onDecreaseQuantity={disminuirCantidad}
-  onRemoveItem={eliminarDelCarrito}
-  onSubmitOrder={realizarPedido}
-  orderSuccess={pedidoExitoso}
-/>
-</div>
+'use client';
+import { useEffect, useState } from 'react';
+import OrderCart from '@/components/OrderCart/OrderCart';
+import ProductCard from '@/components/ProductCard/ProductCard';
 
-
- const [carrito, setCarrito] = useState([]);
+export default function PedidosPage() {
+  const [productos, setProductos] = useState([]);
+  const [carrito, setCarrito] = useState([]);
   const [pedidoExitoso, setPedidoExitoso] = useState(false);
 
-   useEffect(() => {
-    const fetchProducts = async () => {
+  useEffect(() => {
+    const fetchProductos = async () => {
       try {
         const res = await fetch('/api/productos');
         const data = await res.json();
-        setProducts(data);
+        setProductos(data);
       } catch (error) {
         console.error('Error al cargar productos:', error);
       }
     };
-
-    const fetchMesas = async () => {
-      try {
-        const res = await fetch('/api/mesas');
-        const data = await res.json();
-        setMesas(data);
-      } catch (error) {
-        console.error('Error al cargar mesas:', error);
-      }
-    };
-
-    const fetchData = async () => {
-      await Promise.all([fetchProducts(), fetchMesas()]);
-    };
-
-    fetchData();
+    
+    fetchProductos();
   }, []);
-
-  useEffect(() => {
-    if (categoria) {
-      const filtrados = products.filter(
-        (producto) => producto.categoria_id === parseInt(categoria)
-      );
-      setProductosFiltrados(filtrados);
-    } else {
-      setProductosFiltrados(products);
-    }
-  }, [categoria, products]);
 
   const agregarAlCarrito = (producto) => {
     const itemExistente = carrito.find(item => item.id === producto.id);
@@ -94,9 +62,9 @@
     setCarrito(carrito.filter(item => item.id !== productoId));
   };
 
-  const onClickMesa = (mesaId) => {
+/*   const onClickMesa = (mesaId) => {
     setMesaId(mesaId);
-  }
+  } */
 
   const realizarPedido = async () => {
     const total = carrito.reduce((total, item) => {
@@ -142,4 +110,28 @@
     }
   };
 
-*/}
+  return (
+    <div>
+      <h1 className="text-2xl font-semibold text-gray-800">Pedidos</h1>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        {productos.map(producto => (
+          <div key={producto.id} className="bg-white shadow-md p-4">
+            <ProductCard producto={producto} onAddToCart={agregarAlCarrito} />
+          </div>
+        ))}
+      </div>
+      <div className="lg:col-span-1">
+        <OrderCart
+          cartItems={carrito}
+          //mesas={mesas}
+          //onClickMesa={onClickMesa}
+          onIncreaseQuantity={aumentarCantidad}
+          onDecreaseQuantity={disminuirCantidad}
+          onRemoveItem={eliminarDelCarrito}
+          onSubmitOrder={realizarPedido}
+          orderSuccess={pedidoExitoso}
+        />
+      </div>
+    </div>
+  );
+}

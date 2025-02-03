@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { RiArrowDownDoubleFill, RiArrowUpDoubleFill  } from "react-icons/ri";
 
 export default function OrderCart({ cartItems,
-    mesas,
-    onClickMesa,
+    //mesas,
+    //onClickMesa,
     onIncreaseQuantity, 
     onDecreaseQuantity, 
     onRemoveItem, 
     onSubmitOrder,
     orderSuccess }) {
-        const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
+        //const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
         const [isSticky, setIsSticky] = useState(false);
         const [isExpanded, setIsExpanded] = useState(true);
         const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -37,10 +37,10 @@ export default function OrderCart({ cartItems,
             }, 0);
         };
 
-        const handleClick = (id) => {
+       /*  const handleClick = (id) => {
             setMesaSeleccionada(id);
             onClickMesa(id);
-          };
+          }; */
 
           const handleClickRealizarPedido = () => {
             setIsExpanded(false);
@@ -52,9 +52,9 @@ export default function OrderCart({ cartItems,
             onSubmitOrder();
           };
 
-          const getMesaSeleccionada = () => {
+   /*        const getMesaSeleccionada = () => {
             return mesas.find(mesa => mesa.id === mesaSeleccionada)?.nombre_mesa || '';
-          };
+          }; */
 
           const ConfirmDialog = () => showConfirmDialog && (
             <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -86,9 +86,9 @@ export default function OrderCart({ cartItems,
                   {/* Contenido */}
                   <div className="p-4 space-y-4">
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="font-medium text-gray-700 mb-2">
+      {/*                 <p className="font-medium text-gray-700 mb-2">
                         {getMesaSeleccionada()}
-                      </p>
+                      </p> */}
                       <div className="space-y-2">
                         {cartItems.map((item) => (
                           <div key={item.id} className="flex justify-between text-sm">
@@ -224,7 +224,7 @@ export default function OrderCart({ cartItems,
                           </div>
         
                           {/* Mesas */}
-                          <div className="mesas flex flex-wrap justify-center gap-3 p-4 bg-gray-100 rounded-md shadow-md mt-4">
+                         {/*  <div className="mesas flex flex-wrap justify-center gap-3 p-4 bg-gray-100 rounded-md shadow-md mt-4">
                             {mesas.map((mesa) => (
                               <button
                                 key={mesa.id}
@@ -238,7 +238,7 @@ export default function OrderCart({ cartItems,
                                 {mesa.nombre_mesa}
                               </button>
                             ))}
-                          </div>
+                          </div> */}
         
                           {/* Total y botón de enviar */}
                           <div className="flex flex-col gap-4 mt-4">
@@ -248,7 +248,7 @@ export default function OrderCart({ cartItems,
                             </div>
                             <button
                               className="w-full bg-yellow-500 text-black font-semibold py-2 rounded disabled:opacity-50 hover:bg-yellow-600"
-                              disabled={cartItems.length === 0 || mesaSeleccionada === null}
+                              disabled={cartItems.length === 0 /* || mesaSeleccionada === null */}
                               onClick={handleClickRealizarPedido}
                             >
                               Realizar Pedido

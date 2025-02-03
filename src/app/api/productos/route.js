@@ -5,24 +5,28 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const categoriaId = searchParams.get("categoria");
-    console.log('ID de la categoría:', categoriaId);
-
-    if (!categoriaId) {
-      return new Response(JSON.stringify({ error: "Falta el ID de la categoría" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
 
     const connection = await db.getConnection();
-     const [productos] = await connection.query(
-      `SELECT p.*, c.nombre as categoria_nombre 
-       FROM productos p 
-       LEFT JOIN categorias c ON p.categoria_id = c.id 
-       WHERE p.categoria_id = ? 
-       ORDER BY p.nombre`,
-      [categoriaId]
-    );
+     let productos;
+     
+     if(categoriaId){
+      [productos] = await connection.query(
+        `SELECT p.*, c.nombre as categoria_nombre 
+         FROM productos p 
+         LEFT JOIN categorias c ON p.categoria_id = c.id 
+         WHERE p.categoria_id = ? 
+         ORDER BY p.nombre`,
+        [categoriaId]
+      );
+    } else {
+      [productos] = await connection.query(
+        `SELECT p.*, c.nombre as categoria_nombre 
+         FROM productos p 
+         LEFT JOIN categorias c ON p.categoria_id = c.id 
+         ORDER BY p.nombre`
+      );
+    }
+
     connection.release();
 
     return new Response(JSON.stringify(productos), {
