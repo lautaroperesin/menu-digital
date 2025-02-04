@@ -1,0 +1,45 @@
+.home {
+    position: relative;
+    background-color: #f0f0f0; 
+    height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('https://i.pinimg.com/originals/54/89/91/5489916bb1b1abc51efd1b177c858318.gif'); 
+    background-size: cover; 
+    background-position: center;
+  }
+  
+  .presentation {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    flex-wrap: wrap; 
+    width: 100%; 
+    padding: 10px; 
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8); 
+    border-radius: 10px;
+  }
+  
+  .presentation button {
+    background-color: #fff;
+    color: #ff9800;
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 200px; 
+    height: 50px; 
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0 15px rgba(255, 152, 0, 0.8);
+  }
+  
+  .presentation button:hover {
+    background-color: #333;
+    color: #ff9800;
+    transform: scale(1.1);
+  }
