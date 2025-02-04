@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import ProductCard from "@/components/ProductCard/ProductCard";
+import CategoriesNavBar from "@/components/CategoriesNavBar/CategoriesNavBar";
 
 export default function CategoriaPage() {
   const paramsPromise = useParams();
@@ -24,10 +25,12 @@ export default function CategoriaPage() {
 
     fetchProductos();
   }
-  , [categoriaId]);
+  , []);
 
   return (
     <div className="p-6">
+      <CategoriesNavBar categoriaId={categoriaId} />
+      
         {productos.map((producto) => (
           <ProductCard producto={producto} key={producto.id} />
         ))}

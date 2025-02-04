@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import './CategoriesNavBar.css';
 
-export default function CategoriesNavBar() {
-    const [categories, setCategories] = useState([]);
+export default function CategoriesNavBar( {categoriaId} ) {
+    const [subcategories, setSubcategories] = useState([]);
     const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
-        const fetchCategories = async () => {
+        const fetchSubcategories = async () => {
             try {
-                const res = await fetch('/api/categorias');
+                const res = await fetch(`/api/subcategorias/${categoriaId}`);
                 const data = await res.json();
-                setCategories(data);
+                setSubcategories(data);
             } catch (error) {
                 console.error('Error al cargar categorías:', error);
             }
         };
 
-        fetchCategories();
-    }, []);
+        fetchSubcategories();
+    }, [categoriaId]);
 
     return (
         <nav className="categories-nav-bar">
@@ -31,19 +30,14 @@ export default function CategoriesNavBar() {
 
             {/* Menú desplegable */}
             <ul className={`menu-list ${menuOpen ? 'open' : ''}`}>
-                <li>
-                    <Link href="/menu">
-                        <button className="category-button">Todos</button>
-                    </Link>
-                </li>
-                {categories.map((category) => (
+                {subcategories.map((category) => (
                     <li key={category.id}>
-                        <Link href={`/menu?categoria=${category.id}`}>
-                            <button className="category-button">{category.nombre}</button>
-                        </Link>
+                        <button className="category-button">{category.nombre}</button>
                     </li>
                 ))}
             </ul>
+
+            <h3 className="category-title">Categorías</h3>
         </nav>
     );
 }
