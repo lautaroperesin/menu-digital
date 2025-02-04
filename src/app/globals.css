@@ -23,6 +23,8 @@ body {
   height: 100%;
 }
 
+
+
 /*PAGE.JS*/
 /* Sección principal */
 .home {
@@ -78,11 +80,22 @@ body {
 }
 
 /* Botón */
+.presentation {
+  display: flex;
+  justify-content: space-between; /* Espacio entre los botones */
+  align-items: center; /* Aliniear verticalmente */
+  width: 100%; /* Opcional: ajusta el contenedor al ancho disponible */
+  padding: 10px; /* Espacio alrededor del contenedor */
+}
+
+/* Estilo para los botones */
 .presentation button {
   background-color: #fff;
   color: #ff9800;
   font-size: 1.2rem;
   font-weight: bold;
+  width: 200px; /* Ancho fijo para todos los botones */
+  height: 50px; /* Altura fija para todos los botones */
   padding: 10px 20px;
   margin: 5px;
   border: none;
@@ -92,6 +105,7 @@ body {
   box-shadow: 0 0 15px rgba(255, 152, 0, 0.8);
 }
 
+/* Estilo al pasar el ratón sobre los botones */
 .presentation button:hover {
   background-color: #333;
   color: #ff9800;
