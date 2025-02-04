@@ -62,54 +62,6 @@ export default function PedidosPage() {
     setCarrito(carrito.filter(item => item.id !== productoId));
   };
 
-/*   const onClickMesa = (mesaId) => {
-    setMesaId(mesaId);
-  } */
-
-  const realizarPedido = async () => {
-    const total = carrito.reduce((total, item) => {
-      const itemSubtotal = parseFloat(item.subtotal) || 0;
-      return total + itemSubtotal;
-    }, 0);
-
-    try {
-      const pedido = {
-        mesa_id: mesaId,
-        estado: 'pendiente',
-        total: total,
-        detalle_pedidos: carrito.map(item => ({
-          producto_id: item.id,
-          cantidad: item.cantidad,
-          precio_unitario: item.precio,
-          subtotal: item.subtotal
-        }))
-      };
-
-      const response = await fetch('/api/pedidos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(pedido),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error('Error en la respuesta del servidor:', data);
-      }
-
-      if (response.ok) {
-        console.log('Pedido realizado con éxito');
-        setPedidoExitoso(true);
-        setCarrito([]);
-        setTimeout(() => setPedidoExitoso(false), 3000);
-      }
-    } catch (error) {
-      console.error('Error al realizar el pedido:', error);
-    }
-  };
-
   return (
     <div className='p-6'>
         {productos.map(producto => (
@@ -120,12 +72,9 @@ export default function PedidosPage() {
       <div className="lg:col-span-1">
         <OrderCart
           cartItems={carrito}
-          //mesas={mesas}
-          //onClickMesa={onClickMesa}
           onIncreaseQuantity={aumentarCantidad}
           onDecreaseQuantity={disminuirCantidad}
           onRemoveItem={eliminarDelCarrito}
-          onSubmitOrder={realizarPedido}
           orderSuccess={pedidoExitoso}
         />
       </div>

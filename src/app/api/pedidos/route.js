@@ -37,12 +37,10 @@ export async function GET() {
 // Crear nuevo pedido
 export async function POST(request) {
   try {
-    const { mesa_id, detalle_pedidos } = await request.json();
-
-    console.log('Pedido:', { mesa_id, detalle_pedidos });
+    const { detalle_pedidos } = await request.json();
 
     // Validar los datos recibidos
-    if (!mesa_id || !detalle_pedidos || detalle_pedidos.length === 0) {
+    if (!detalle_pedidos || detalle_pedidos.length === 0) {
       return NextResponse.json({ error: 'Faltan datos' }, { status: 400 });
     }
 
@@ -70,8 +68,8 @@ export async function POST(request) {
 
       // Insertar el pedido
       const [resultPedido] = await connection.query(
-        'INSERT INTO pedidos (mesa_id, estado, total, fecha_hora) VALUES (?, "pendiente", ?, NOW())',
-        [mesa_id, total]
+        'INSERT INTO pedidos (estado, total, fecha_hora) VALUES ("pendiente", ?, NOW())',
+        [total]
       );
 
       const pedidoId = resultPedido.insertId;
