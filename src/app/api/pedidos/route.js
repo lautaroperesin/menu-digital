@@ -37,11 +37,14 @@ export async function GET() {
 // Crear nuevo pedido
 export async function POST(request) {
   try {
-    const { detalle_pedidos } = await request.json();
+    const { detalle_pedidos, forma_entrega, forma_pago, nombre_cliente, telefono_cliente, direccion_cliente } = await request.json();
 
     // Validar los datos recibidos
     if (!detalle_pedidos || detalle_pedidos.length === 0) {
       return NextResponse.json({ error: 'Faltan datos' }, { status: 400 });
+    }
+    if (!forma_entrega || !forma_pago || !nombre_cliente || !telefono_cliente) {
+      return NextResponse.json({ error: 'Faltan datos obligatorios' }, { status: 400 });
     }
 
     // Iniciar transacción
@@ -68,8 +71,20 @@ export async function POST(request) {
 
       // Insertar el pedido
       const [resultPedido] = await connection.query(
-        'INSERT INTO pedidos (estado, total, fecha_hora) VALUES ("pendiente", ?, NOW())',
-        [total]
+        `
+        INSERT INTO pedidos 
+        (estado, total, fecha_hora, forma_entrega, forma_pago, nombre_cliente, telefono_cliente, direccion_cliente)
+        VALUES (?, ?, NOW(), ?, ?, ?, ?, ?)
+        `,
+        [
+          'pendiente', // Estado inicial
+          total,
+          forma_entrega,
+          forma_pago,
+          nombre_cliente,
+          telefono_cliente,
+          direccion_cliente || null // Dirección es opcional (solo para delivery)
+        ]
       );
 
       const pedidoId = resultPedido.insertId;

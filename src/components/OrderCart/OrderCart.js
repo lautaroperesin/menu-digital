@@ -1,12 +1,11 @@
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { RiArrowDownDoubleFill, RiArrowUpDoubleFill  } from "react-icons/ri";
 
 export default function OrderCart({ cartItems,
     onIncreaseQuantity, 
     onDecreaseQuantity, 
-    onRemoveItem, 
-    orderSuccess }) {
+    onRemoveItem
+   }) {
         const [isSticky, setIsSticky] = useState(false);
         const [isExpanded, setIsExpanded] = useState(true);
 
@@ -38,12 +37,6 @@ export default function OrderCart({ cartItems,
         
           return (
             <>
-              {orderSuccess && (
-                <div className="fixed top-16 left-0 right-0 z-50 flex justify-center p-4 bg-green-500 text-white">
-                  Su pedido estará listo en unos minutos. ¡Gracias por su preferencia!
-                </div>
-              )}
-        
               {isSticky && (
                 <div className={`fixed bottom-0 left-0 right-0 w-full z-50 transition-all duration-300 ${
                   isExpanded ? 'h-auto max-h-[80vh]' : 'h-auto'
@@ -122,8 +115,12 @@ export default function OrderCart({ cartItems,
                             <button
                               className="w-full bg-yellow-500 text-black font-semibold py-2 rounded disabled:opacity-50 hover:bg-yellow-600"
                               disabled={cartItems.length === 0}
+                              onClick={() => {
+                                localStorage.setItem('carrito', JSON.stringify(cartItems));
+                                window.location.href = '/pedidos/detalle';
+                              }}
                             >
-                              Ver Pedido
+                              VER TU PEDIDO
                             </button>
                             </div>
                         </div>

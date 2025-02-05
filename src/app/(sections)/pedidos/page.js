@@ -6,7 +6,6 @@ import ProductCard from '@/components/ProductCard/ProductCard';
 export default function PedidosPage() {
   const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
-  const [pedidoExitoso, setPedidoExitoso] = useState(false);
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -75,7 +74,6 @@ export default function PedidosPage() {
           onIncreaseQuantity={aumentarCantidad}
           onDecreaseQuantity={disminuirCantidad}
           onRemoveItem={eliminarDelCarrito}
-          orderSuccess={pedidoExitoso}
         />
       </div>
     </div>

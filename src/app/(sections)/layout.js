@@ -10,6 +10,7 @@ const sectionTitles = {
     '/pedidos': 'PEDIDOS',
     '/reservas': 'RESERVAS',
     '/nosotros': 'NOSOTROS',
+    '/pedidos/detalle': 'TU PEDIDO',
 };
 
 export default function MenuLayout({ children }) {
