@@ -1,57 +1,122 @@
-import React, { useState } from 'react';
-import './Reservas.css';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import './ReservasCard.css';
 
-const Reservas = () => {
-  // Datos de ejemplo de reservas
-  const reservas = [
-    { id: 1, nombre: 'Juan Perez', fecha: '2023-10-01', hora: '14:00' },
-    { id: 2, nombre: 'Maria Gomez', fecha: '2023-10-02', hora: '15:00' },
-    { id: 3, nombre: 'Carlos Ruiz', fecha: '2023-10-03', hora: '16:00' },
-    { id: 4, nombre: 'Ana Lopez', fecha: '2023-10-04', hora: '17:00' },
-    { id: 5, nombre: 'Luis Torres', fecha: '2023-10-05', hora: '18:00' },
-    { id: 6, nombre: 'Sofia Ramirez', fecha: '2023-10-06', hora: '19:00' },
-    { id: 7, nombre: 'Pedro Sanchez', fecha: '2023-10-07', hora: '20:00' },
-    { id: 8, nombre: 'Laura Diaz', fecha: '2023-10-08', hora: '21:00' },
-    { id: 9, nombre: 'Miguel Angel', fecha: '2023-10-09', hora: '22:00' },
-    { id: 10, nombre: 'Elena Castro', fecha: '2023-10-10', hora: '23:00' },
-  ];
+export default function ReservasCard({ order, updateOrderStatus }) {
+    const formatTimestamp = (timestamp) => {
+        return new Date(timestamp).toLocaleString();
+    };
 
-  // Estado para manejar la página actual
-  const [paginaActual, setPaginaActual] = useState(1);
-  const reservasPorPagina = 3;
+    const handlePrintPDF = () => {
+        // Crear PDF con tamaño personalizado (80mm x 150mm)
+        const doc = new jsPDF({
+            unit: 'mm', // Usamos milímetros
+            format: [80, 150], // Ancho 80mm, Alto 150mm (típico ticket)
+        });
 
-  // Calcular el índice de las reservas a mostrar
-  const indiceUltimaReserva = paginaActual * reservasPorPagina;
-  const indicePrimeraReserva = indiceUltimaReserva - reservasPorPagina;
-  const reservasActuales = reservas.slice(indicePrimeraReserva, indiceUltimaReserva);
+        // Encabezado
+        doc.setFont('Helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.text('Ticket del Pedido', 40, 10, { align: 'center' });
 
-  // Cambiar de página
-  const cambiarPagina = (numeroPagina) => setPaginaActual(numeroPagina);
+        // Línea decorativa
+        doc.setDrawColor(0, 123, 255);
+        doc.setLineWidth(0.5);
+        doc.line(5, 15, 75, 15);
 
-  return (
-    <div className="reservas-container">
-      <h1>Reservas</h1>
-      <ul className="reservas-list">
-        {reservasActuales.map((reserva) => (
-          <li key={reserva.id} className="reserva-item">
-            <span>{reserva.nombre}</span>
-            <span>{reserva.fecha} a las {reserva.hora}</span>
-          </li>
-        ))}
-      </ul>
-      <div className="paginacion">
-        {Array.from({ length: Math.ceil(reservas.length / reservasPorPagina) }, (_, i) => (
-          <button
-            key={i + 1}
-            onClick={() => cambiarPagina(i + 1)}
-            className={paginaActual === i + 1 ? 'active' : ''}
-          >
-            {i + 1}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
+        // Fecha y Hora
+        doc.setFont('Helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.text(`Fecha y Hora: ${formatTimestamp(order.fecha_hora)}`, 5, 20);
 
-export default Reservas;
+        // Detalles del Pedido
+        const tableData = order.productos.map((item) => [
+            `${item.cantidad}x ${item.nombre}`,
+            `$${(item.precio * item.cantidad).toFixed(2)}`,
+        ]);
+
+        doc.autoTable({
+            startY: 25,
+            head: [['Producto', 'Precio']],
+            body: tableData,
+            theme: 'plain', // Estilo limpio
+            styles: {
+                fontSize: 8,
+                halign: 'center',
+                textColor: [40, 40, 40],
+            },
+            headStyles: {
+                fillColor: [0, 123, 255],
+                textColor: [255, 255, 255],
+                fontStyle: 'bold',
+            },
+        });
+
+        // Total
+        const finalY = doc.autoTable.previous.finalY;
+        doc.setFont('Helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.text(`Total: $${order.total}`, 5, finalY + 10);
+
+        // Mensaje de agradecimiento
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text('¡Gracias por su visita!', 40, finalY + 20, { align: 'center' });
+
+        // Descargar PDF
+        doc.save(`Ticket_Pedido_Mesa_${order.mesa_id}.pdf`);
+    };
+
+    return (
+        <div className="order-details-card">
+            <header>
+                <div className="flex justify-between items-center">
+                    <h3 className="text-xl">Mesa #{order.mesa_id}</h3>
+                    <p className={`status ${order.estado}`}>{order.estado.toUpperCase()}</p>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <p>{formatTimestamp(order.fecha_hora)}</p>
+                </div>
+            </header>
+            <div>
+                <div className="space-y-4">
+                    <div className="space-y-2">
+                        {order.productos.map((item) => (
+                            <div key={item.id} className="flex justify-between items-center">
+                                <span>{item.cantidad}x {item.nombre}</span>
+                                <span className="font-medium">${(item.precio * item.cantidad).toFixed(2)}</span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="pt-4 border-t flex justify-between items-center">
+                        <span className="font-bold">Total</span>
+                        <div className="flex items-center gap-1">
+                            <span className="font-bold">${order.total}</span>
+                        </div>
+                    </div>
+                    {(order.estado === 'pendiente' || order.estado === 'en-proceso') && (
+                        <div className="pt-4 border-t">
+                            <select
+                                value={order.estado}
+                                onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                            >
+                                <option value="pendiente">Pendiente</option>
+                                <option value="en-proceso">En Preparación</option>
+                                <option value="completado">Completado</option>
+                            </select>
+                        </div>
+                    )}
+                </div>
+                {/* Botón para imprimir el ticket */}
+                <div className="mt-4">
+                    <button
+                        onClick={handlePrintPDF}
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition transform hover:scale-105"
+                    >
+                        Imprimir Ticket
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}

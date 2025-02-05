@@ -27,6 +27,12 @@ export default function Sidebar( {handleLogout} ) {
               </Link>
             </li>
             <li>
+              <Link href="/admin/reserva" className="flex items-center space-x-2 hover:text-yellow-600">
+                <HiOutlineClipboardList className="w-5 h-5" />
+                <span>Reservas</span>
+              </Link>
+            </li>
+            <li>
                 <button onClick={handleLogout} className="flex items-center space-x-2 hover:text-yellow-600">
                     <PiSignOutBold className="w-5 h-5" />
                     <span>Cerrar sesión</span>
