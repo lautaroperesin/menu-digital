@@ -44,7 +44,7 @@ body {
 /* Contenedor de presentación */
 .presentation {
   padding: 20px;
-  max-width: 600px;
+  margin-top: 50px;
   animation: fadeIn 2s ease-in-out;
   display: flex;
   flex-direction: column;
@@ -77,15 +77,6 @@ body {
 .presentation p {
   font-size: 1.2rem;
   margin-bottom: 20px;
-}
-
-/* Botón */
-.presentation {
-  display: flex;
-  justify-content: space-between; /* Espacio entre los botones */
-  align-items: center; /* Aliniear verticalmente */
-  width: 100%; /* Opcional: ajusta el contenedor al ancho disponible */
-  padding: 10px; /* Espacio alrededor del contenedor */
 }
 
 /* Estilo para los botones */

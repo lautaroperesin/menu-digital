@@ -28,6 +28,22 @@ export default function DetallePedidoPage() {
     }
   }, [router]);
 
+  const handlePedidoExitoso = () => {
+    console.log('Pedido realizado con éxito');
+    setPedidoExitoso(true);
+    setCartItems([]);
+    setDatosUsuario({
+      nombre: '',
+      telefono: '',
+      direccion: '',
+      referencia: ''
+    });
+    setEntrega('retiro');
+    localStorage.removeItem('carrito');
+    //router.push('/pedidos');
+    setTimeout(() => setPedidoExitoso(false), 3000);
+  };
+
   // Enviar datos del pedido al servidor
   const realizarPedido = async () => {
     const total = cartItems.reduce((total, item) => {
@@ -72,12 +88,7 @@ export default function DetallePedidoPage() {
       }
 
       if (response.ok) {
-        console.log('Pedido realizado con éxito', data);
-        setPedidoExitoso(true);
-        setCartItems([]);
-        localStorage.removeItem('carrito');
-        //router.push('/pedidos');
-        setTimeout(() => setPedidoExitoso(false), 3000);
+        handlePedidoExitoso();
       } else {
         const errorData = await response.json();
         console.error('Error al enviar el pedido:', errorData);
@@ -246,6 +257,17 @@ export default function DetallePedidoPage() {
                   value={datosUsuario.direccion}
                   onChange={(e) =>
                     setDatosUsuario({ ...datosUsuario, direccion: e.target.value })
+                  }
+                  className="mt-1 p-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50"
+                />
+              </label>
+              <label className="block">
+                <h3 className="text-[#333] font-bold text-lg">REFERENCIAS:</h3>
+                <input
+                  type="text"
+                  value={datosUsuario.referencia}
+                  onChange={(e) =>
+                    setDatosUsuario({ ...datosUsuario, referencia: e.target.value })
                   }
                   className="mt-1 p-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50"
                 />
