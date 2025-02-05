@@ -76,7 +76,7 @@ export default function DetallePedidoPage() {
         setPedidoExitoso(true);
         setCartItems([]);
         localStorage.removeItem('carrito');
-        router.push('/pedidos');
+        //router.push('/pedidos');
         setTimeout(() => setPedidoExitoso(false), 3000);
       } else {
         const errorData = await response.json();
@@ -178,120 +178,137 @@ export default function DetallePedidoPage() {
         </div>
       )}
       
-      <div className="flex flex-col gap-4 mt-4 p-20">
-        <div>
+      <div className="flex flex-col gap-6 p-4 max-w-2xl mx-auto bg-gray-200 rounded-lg shadow-lg">
+        {/* Lista de productos */}
+        <div className="space-y-4">
           {cartItems.map((item) => (
             <div
-            key={item.id}
-            className="flex items-center justify-between gap-3 p-3 bg-white rounded-md shadow hover:shadow-md transition-shadow"
+              key={item.id}
+              className="flex justify-between items-center p-2 border border-gray-300 rounded-lg hover:border-[#ff9800] transition-colors"
             >
               <div>
-                <h3 className="font-medium text-gray-900">{item.nombre}</h3>
+                <h3 className="font-medium text-[#333]">{item.nombre}</h3>
                 <p className="text-sm text-gray-600">
                   ${item.precio} x {item.cantidad} ={" "}
-                  <span className="font-semibold text-gray-800">
+                  <span>
                     ${item.subtotal}
                   </span>
                 </p>
               </div>
             </div>
-            ))}
+          ))}
         </div>
-        
-        <div className="w-full flex justify-between items-center">
+
+        {/* Total */}
+        <div className="w-full flex justify-between items-center p-4 bg-[#333] text-white rounded-lg">
           <span className="font-bold">TOTAL:</span>
-          <span className="text-xl font-bold">${calculateTotal()}</span>
+          <span className="text-xl font-bold text-[#ff9800]">${calculateTotal()}</span>
         </div>
 
-         <form>
-        {/* Forma de entrega */}
-        <div>
-          <h3>FORMA DE ENTREGA:</h3>
-          <label>
-            <input
-              type="radio"
-              name="entrega"
-              value="retiro"
-              checked={entrega === 'retiro'}
-              onChange={() => setEntrega('retiro')}
-            />
-            Retiro en el local
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="entrega"
-              value="delivery"
-              checked={entrega === 'delivery'}
-              onChange={() => setEntrega('delivery')}
-            />
-            Delivery
-          </label>
-        </div>
-
-        {/* Dirección (solo visible si selecciona "delivery") */}
-        {entrega === 'delivery' && (
-          <div>
-            <label>
-              DIRECCIÓN:
-              <input
-                type="text"
-                value={datosUsuario.direccion}
-                onChange={(e) =>
-                  setDatosUsuario({ ...datosUsuario, direccion: e.target.value })
-                }
-              />
-            </label>
+        {/* Formulario */}
+        <form className="space-y-6 border-t border-gray-500 pt-4">
+          {/* Forma de entrega */}
+          <div className="space-y-3">
+            <h3 className="text-[#333] font-bold text-lg">FORMA DE ENTREGA:</h3>
+            <div className="flex gap-6 accent-[#ff9800] p-4">
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="entrega"
+                  value="retiro"
+                  checked={entrega === 'retiro'}
+                  onChange={() => setEntrega('retiro')}
+                  className="text-[#ff9800] focus:ring-[#ff9800]"
+                />
+                <span className="text-[#333]">Retiro en el local</span>
+              </label>
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="entrega"
+                  value="delivery"
+                  checked={entrega === 'delivery'}
+                  onChange={() => setEntrega('delivery')}
+                  className="text-[#ff9800] focus:ring-[#ff9800]"
+                />
+                <span className="text-[#333]">Delivery</span>
+              </label>
+            </div>
           </div>
-        )}
 
-        {/* Forma de pago */}
-        <div>
-          <h3>FORMA DE PAGO:</h3>
-          <select
-            value={formaPago}
-            onChange={(e) => setFormaPago(e.target.value)}
-          >
-            <option value="efectivo">Efectivo</option>
-            <option value="tarjeta">Tarjeta de Crédito/Débito</option>
-            <option value="transferencia">Transferencia</option>
-          </select>
-        </div>
+          {/* Dirección (condicional) */}
+          {entrega === 'delivery' && (
+            <div className="space-y-2">
+              <label className="block">
+                <h3 className="text-[#333] font-bold text-lg">DIRECCIÓN:</h3>
+                <input
+                  type="text"
+                  value={datosUsuario.direccion}
+                  onChange={(e) =>
+                    setDatosUsuario({ ...datosUsuario, direccion: e.target.value })
+                  }
+                  className="mt-1 p-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50"
+                />
+              </label>
+            </div>
+          )}
 
-        {/* Datos del usuario */}
-        <div>
-          <h3>TUS DATOS:</h3>
-          <label>
-            Nombre:
-            <input
-              type="text"
-              value={datosUsuario.nombre}
-              onChange={(e) =>
-                setDatosUsuario({ ...datosUsuario, nombre: e.target.value })
-              }
-            />
-          </label>
-          <label>
-            Teléfono:
-            <input
-              type="text"
-              value={datosUsuario.telefono}
-              onChange={(e) =>
-                setDatosUsuario({ ...datosUsuario, telefono: e.target.value })
-              }
-            />
-          </label>
-        </div>
-      </form>
+          {/* Forma de pago */}
+          <div className="space-y-2">
+            <h3 className="text-[#333] font-bold text-lg">FORMA DE PAGO:</h3>
+            <select
+              value={formaPago}
+              onChange={(e) => setFormaPago(e.target.value)}
+              className="block w-full rounded-md border-gray-300 p-4 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50"
+            >
+              <option value="efectivo">Efectivo</option>
+              <option value="tarjeta">Tarjeta de Crédito/Débito</option>
+              <option value="transferencia">Transferencia</option>
+            </select>
+          </div>
 
+          {/* Datos del usuario */}
+          <div className="space-y-4">
+            <h3 className="text-[#333] font-bold text-lg">TUS DATOS:</h3>
+            <div className="grid grid-cols-1 gap-4">
+              <label className="block">
+                <span className="text-[#333] font-medium">Nombre:</span>
+                <input
+                  type="text"
+                  value={datosUsuario.nombre}
+                  onChange={(e) =>
+                    setDatosUsuario({ ...datosUsuario, nombre: e.target.value })
+                  }
+                  className="mt-1 p-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50"
+                />
+              </label>
+              <label className="block">
+                <span className="text-[#333] font-medium">Teléfono:</span>
+                <input
+                  type="text"
+                  value={datosUsuario.telefono}
+                  onChange={(e) =>
+                    setDatosUsuario({ ...datosUsuario, telefono: e.target.value })
+                  }
+                  className="mt-1 p-4 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#ff9800] focus:ring focus:ring-[#ff9800] focus:ring-opacity-50"
+                />
+              </label>
+            </div>
+          </div>
+        </form>
 
-          <button
-            className="w-full bg-yellow-500 text-black font-semibold py-2 rounded disabled:opacity-50 hover:bg-yellow-600"
-            onClick={() => setShowConfirmDialog(true)}
-            disabled={!formaPago || !datosUsuario.nombre || !datosUsuario.telefono || (entrega === 'delivery' && !datosUsuario.direccion)}>
-              FINALIZAR PEDIDO
-          </button>
-        </div>
+        {/* Botón de finalizar */}
+        <button
+          className="w-full bg-[#ff9800] text-[#333] font-bold py-3 rounded-lg 
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                    hover:bg-[#ff9800]/90 transition-colors
+                    focus:outline-none focus:ring-2 focus:ring-[#ff9800] focus:ring-opacity-50"
+          onClick={() => setShowConfirmDialog(true)}
+          disabled={!formaPago || !datosUsuario.nombre || !datosUsuario.telefono || (entrega === 'delivery' && !datosUsuario.direccion)}
+        >
+          FINALIZAR PEDIDO
+        </button>
+      </div>
       </>
   );
 }
