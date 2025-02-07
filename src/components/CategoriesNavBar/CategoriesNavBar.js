@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { HiMenuAlt3 } from "react-icons/hi";
 import './CategoriesNavBar.css';
 
-export default function CategoriesNavBar( {categoriaId} ) {
+export default function CategoriesNavBar({ categoriaId, onSelectSubcategoria }) {
     const [subcategories, setSubcategories] = useState([]);
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -19,21 +20,34 @@ export default function CategoriesNavBar( {categoriaId} ) {
         fetchSubcategories();
     }, [categoriaId]);
 
+    const handleSubcategoriaClick = (subcategoria) => {
+        onSelectSubcategoria(subcategoria);
+        setMenuOpen(false);
+      };
+
     return (
         <nav className="categories-nav-bar">
             {/* Botón de menú hamburguesa */}
             <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 6h16M4 12h16m-7 6h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <HiMenuAlt3 size={24} />
             </button>
 
             {/* Menú desplegable */}
             <ul className={`menu-list ${menuOpen ? 'open' : ''}`}>
-                {subcategories.map((category) => (
-                    <li key={category.id}>
-                        <button className="category-button">{category.nombre}</button>
-                    </li>
+            <li>
+            <button className="category-button" onClick={() => handleSubcategoriaClick(null)}>
+                Todas
+            </button>
+            </li>
+            {subcategories.map((category) => (
+                <li key={category.id}>
+                    <button
+                    className="category-button"
+                    onClick={() => handleSubcategoriaClick(category.nombre)}
+                    >
+                    {category.nombre}
+                    </button>
+                </li>
                 ))}
             </ul>
 

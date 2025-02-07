@@ -11,9 +11,10 @@ export async function GET(req) {
      
      if(categoriaId){
       [productos] = await connection.query(
-        `SELECT p.*, c.nombre as categoria_nombre 
+        `SELECT p.*, c.nombre as categoria_nombre, s.nombre as subcategoria_nombre
          FROM productos p 
-         LEFT JOIN categorias c ON p.categoria_id = c.id 
+         LEFT JOIN categorias c ON p.categoria_id = c.id
+         LEFT JOIN subcategorias s ON p.subcategoria_id = s.id
          WHERE p.categoria_id = ? 
          ORDER BY p.nombre`,
         [categoriaId]
