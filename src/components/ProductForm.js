@@ -11,10 +11,19 @@ export default function ProductForm({
   const [product, setProduct] = useState(initialProduct);
   const [imagenPreview, setImagenPreview] = useState("");
   const [subiendoImagen, setSubiendoImagen] = useState(false);
+  const [subcategories, setSubcategories] = useState([]);
 
   useEffect(() => {
     setProduct(initialProduct || {});
   }, [initialProduct]);
+
+  useEffect(() => {
+    if (product.categoria_id) {
+      fetch(`/api/subcategorias/${product.categoria_id}`)
+        .then((res) => res.json())
+        .then((data) => setSubcategories(data));
+    }
+  }, [product.categoria_id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -122,6 +131,25 @@ export default function ProductForm({
           {categories.map((category) => (
             <option key={category.id} value={category.id}>
               {category.nombre}
+            </option>
+          ))}
+        </select>
+      </div>
+
+        {/* Subcategoría */}
+        <div className="mb-4">
+        <label className="block mb-2">Subcategoría:</label>
+        <select
+          name="subcategoria_id"
+          value={product.subcategoria_id || ""}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded"
+          required
+        >
+          <option value="">Seleccionar</option>
+          {subcategories.map((subcategory) => (
+            <option key={subcategory.id} value={subcategory.id}>
+              {subcategory.nombre}
             </option>
           ))}
         </select>

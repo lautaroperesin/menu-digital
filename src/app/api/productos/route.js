@@ -47,21 +47,22 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const connection = await db.getConnection();
-    const { nombre, precio, imagen, categoria_id, descripcion } = body;
+    const { nombre, precio, imagen, categoria_id, subcategoria_id, descripcion } = body;
 
-    if (!nombre || !precio || !imagen || !categoria_id || !descripcion) {
+    if (!nombre || !precio || !imagen || !categoria_id || !subcategoria_id || !descripcion) {
       return new Response(
         JSON.stringify({ error: 'Todos los campos son obligatorios' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    await connection.query('INSERT INTO productos (nombre, precio, imagen, descripcion, categoria_id) VALUES (?, ?, ?, ?, ?)', [
+    await connection.query('INSERT INTO productos (nombre, precio, imagen, descripcion, categoria_id, subcategoria_id) VALUES (?, ?, ?, ?, ?, ?)', [
       nombre,
       precio,
       imagen,
       descripcion,
-      categoria_id
+      categoria_id,
+      subcategoria_id
     ]);
 
     connection.release();
@@ -86,8 +87,8 @@ export async function PUT(request) {
     const connection = await db.getConnection();
 
     const result = await connection.query(
-      'UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, categoria_id = ?, imagen = ? WHERE id = ?',
-      [data.nombre, data.descripcion, data.precio, data.categoria_id, data.imagen, data.id]
+      'UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, categoria_id = ?, subcategoria_id = ?, imagen = ? WHERE id = ?',
+      [data.nombre, data.descripcion, data.precio, data.categoria_id, data.subcategoria_id, data.imagen, data.id]
     );
 
     connection.release();
