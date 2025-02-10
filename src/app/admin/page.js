@@ -51,12 +51,20 @@ export default function AdminPanel() {
             className="bg-white shadow-xl p-8 rounded-xl hover:shadow-2xl transition-all duration-300 ease-out hover:bg-green-50"
           />
         </Link>
+
         <StatCard 
           title="Ingresos del Día" 
           value={`$${dashboardData.dailyIncome}`} 
           icon={<FaDollarSign className="h-10 w-10 text-yellow-600" />} 
           className="bg-white shadow-xl p-8 rounded-xl hover:shadow-2xl transition-all duration-300 ease-out hover:bg-yellow-50"
         />
+        <Link href="/admin/reserva">
+          <StatCard 
+            title="Reservas" 
+            icon={<LuShoppingCart className="h-10 w-10 text-blue-600" />} 
+            className="bg-white shadow-xl p-8 rounded-xl hover:shadow-2xl transition-all duration-300 ease-out hover:bg-blue-50"
+          />
+        </Link>
       </div>
   
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">

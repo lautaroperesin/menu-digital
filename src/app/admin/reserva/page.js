@@ -4,59 +4,39 @@ import ReservasCard from "@/components/ReservasCard/ReservasCard";
 import { useEffect, useState } from "react";
 
 export default function AdminOrdersPage() {
-  const [orders, setOrders] = useState([]);
+  const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [reservasHabilitadas, setReservasHabilitadas] = useState(true);  // Estado para controlar si las reservas están habilitadas
 
-  // Función para cargar pedidos
-  const fetchOrders = async () => {
+  const fetchReservas = async () => {
     try {
-      const response = await fetch('/api/reserva');
-      if (!response.ok) throw new Error("No se pudieron cargar los pedidos");
+      const response = await fetch('/api/reserva'); 
+      if (!response.ok) throw new Error("No se pudieron cargar las reservas");
       
       const data = await response.json();
-      setOrders(data);
+      console.log("📡 Datos de reservas:", data); // Para depuración
+
+      if (Array.isArray(data)) {
+        setReservas(data);
+      } else {
+        setReservas([]); // Evita que el map falle
+      }
     } catch (error) {
-      console.error('Error al cargar pedidos:', error);
+      console.error('Error al cargar reservas:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Cargar pedidos iniciales y actualizar cada 10 segundos
   useEffect(() => {
-    fetchOrders();
-    const interval = setInterval(fetchOrders, 10000);
-    return () => clearInterval(interval); // Limpiar intervalo al desmontar
+    fetchReservas();
+    const interval = setInterval(fetchReservas, 10000);
+    return () => clearInterval(interval);
   }, []);
 
-  // Función para actualizar estado del pedido
-  const updateOrderStatus = async (orderId, newStatus) => {
-    try {
-      const response = await fetch(`/api/pedidos/${orderId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ estado: newStatus }),
-      });
-
-      if (!response.ok) throw new Error('Error al actualizar el pedido');
-
-      setOrders(prevOrders =>
-        prevOrders.map(order =>
-          order.id === orderId ? { ...order, estado: newStatus } : order
-        )
-      );
-
-      console.log(`✅ Pedido #${orderId} actualizado a ${newStatus}`);
-    } catch (error) {
-      console.error('⚠️ Error al actualizar estado:', error);
-    }
+  const handleDeshabilitarReservas = () => {
+    setReservasHabilitadas(false);  // Cambia el estado para deshabilitar las reservas
   };
-
-  // Filtrar solo "libre" y "reservada"
-  const mesasLibres = orders.filter(order => order.estado === 'libre');
-  const mesasReservadas = orders.filter(order => order.estado === 'reservada');
 
   if (loading) {
     return (
@@ -68,21 +48,31 @@ export default function AdminOrdersPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Reservas de Mesas</h1>
-      
-      <h2 className="font-bold mt-4 mb-3">Mesas Disponibles</h2>
-      <div className="bg-yellow-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {mesasLibres.map(order => (
-          <ReservasCard key={order.id} order={order} updateOrderStatus={updateOrderStatus} />
-        ))}
-      </div>
+      <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Administrar Reservas</h1>
 
-      <h2 className="font-bold mt-4 mb-3">Mesas Reservadas</h2>
-      <div className="bg-yellow-50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {mesasReservadas.map(order => (
-          <ReservasCard key={order.id} order={order} updateOrderStatus={updateOrderStatus} />
-        ))}
-      </div>
+      <button 
+        onClick={handleDeshabilitarReservas} 
+        className="bg-red-500 text-white py-2 px-4 rounded-lg mb-4"
+      >
+        Deshabilitar Reservas
+      </button>
+
+      {reservas.length === 0 ? (
+        <p className="text-center text-gray-500">No hay reservas disponibles.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {reservas.map(reserva => (
+            reserva ? 
+              <ReservasCard 
+                key={reserva.id} 
+                reserva={reserva} 
+                reservasHabilitadas={reservasHabilitadas} // Pasa el estado a cada card
+                updateOrderStatus={() => {}} 
+              /> 
+              : null
+          ))}
+        </div>
+      )}
     </div>
   );
 }
