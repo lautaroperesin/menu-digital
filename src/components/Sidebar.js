@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AiFillHome } from "react-icons/ai";
 import { HiOutlineClipboardList, HiOutlineShoppingBag  } from "react-icons/hi";
+import { FaClipboardCheck } from "react-icons/fa6";
 import { PiSignOutBold } from "react-icons/pi";
 
 export default function Sidebar( {handleLogout} ) {
@@ -28,7 +29,7 @@ export default function Sidebar( {handleLogout} ) {
             </li>
             <li>
               <Link href="/admin/reserva" className="flex items-center space-x-2 hover:text-yellow-600">
-                <HiOutlineClipboardList className="w-5 h-5" />
+                <FaClipboardCheck className="w-5 h-5" />
                 <span>Reservas</span>
               </Link>
             </li>

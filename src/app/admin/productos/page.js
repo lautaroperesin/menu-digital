@@ -70,6 +70,7 @@ export default function AdminProductsPage() {
     <div>
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Gestión de Productos</h1>
 
+      <div className="flex flex-row-reverse justify-center">
       <ProductForm 
         initialProduct={editProduct || {}}
         categories={categories}
@@ -78,12 +79,15 @@ export default function AdminProductsPage() {
         isEditing={!!editProduct}
         />
 
+      <div className="flex flex-col w-full">
       <ProductsTable 
         products={products}
         categories={categories}
         onEdit={(product) => setEditProduct(product)}
         onDelete={handleDelete}
       />
+      </div>
+      </div>
     </div>
   );
 }

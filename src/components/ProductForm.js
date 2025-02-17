@@ -72,9 +72,9 @@ export default function ProductForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-lg mb-8 bg-white p-6 rounded-lg shadow"
+      className="mx-4 p-6 rounded-lg shadow h-fit border-solid border-2 border-gray-200"
     >
-      <h2 className="text-xl font-bold mb-4">
+      <h2 className="text-xl font-bold mb-4 p-2 rounded">
         {isEditing ? "Editar Producto" : "Agregar Nuevo Producto"}
       </h2>
 
