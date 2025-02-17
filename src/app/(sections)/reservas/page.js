@@ -46,7 +46,10 @@ export default function ReservasPage({ noHayReservas }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-orange-400 to-orange-300 flex flex-col items-center p-6 text-white">
+    <div 
+      className="min-h-screen flex flex-col items-center p-6 text-white bg-gradient-to-r from-orange-400 to-orange-300"
+      style={{ backgroundImage: "url('/images/PINOCHOAJA.jpg')", backgroundSize: "cover", backgroundPosition: "center" }}
+    >
       <h1 className="text-4xl font-extrabold mb-8 text-center text-shadow-lg">Reserva tu Lugar</h1>
       
       {noHayReservas && <p className="bg-white text-black p-3 rounded-xl shadow-md mb-6">No hay más reservas disponibles.</p>}
@@ -116,4 +119,5 @@ export default function ReservasPage({ noHayReservas }) {
       </div>
     </div>
   );
+  
 }
