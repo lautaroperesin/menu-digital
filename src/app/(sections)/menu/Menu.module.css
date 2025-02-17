@@ -5,7 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('https://i.pinimg.com/originals/54/89/91/5489916bb1b1abc51efd1b177c858318.gif'); 
+    background-image: url('/images/PINOCHOAJA.jpg');
     background-size: cover; 
     background-position: center;
   }

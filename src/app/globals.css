@@ -34,9 +34,9 @@ body {
   flex-grow: 1;
   flex-direction: column;
   min-height: 120vh;
-  background: linear-gradient(to bottom, #ffb444, #ffc774);
+  background: linear-gradient(to bottom, #ffffff, #e0e0e0);
   text-align: center;
-  color: #fff;
+  color: #ff9900b4;
   position: relative;
   overflow: hidden;
 }

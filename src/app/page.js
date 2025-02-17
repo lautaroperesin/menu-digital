@@ -7,7 +7,7 @@ export default function Home() {
     <section className="home">
       <div className="presentation">
         <img
-          src="/images/logo.png"
+          src="/images/PINOCHO.png"
           alt="Logo"
           className="logo-presentation animated-logo"
         />
@@ -45,16 +45,11 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="footer">
-        <p>&copy; 2024 CMS Equipamientos - Desarrolladores. Todos los derechos reservados.</p>
+        <p>&copy; 2025 CMS Equipamientos - Desarrolladores. Todos los derechos reservados.</p>
         <div className="social-icons">
           <Link href="https://facebook.com" target="_blank">
             <i className="fab fa-facebook">
               <BsFacebook />
-            </i>
-          </Link>
-          <Link href="https://twitter.com" target="_blank">
-            <i className="fab fa-twitter">
-              <BsTwitter />
             </i>
           </Link>
           <Link href="https://instagram.com" target="_blank">
