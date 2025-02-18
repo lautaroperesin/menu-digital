@@ -22,11 +22,11 @@ export default function Home() {
         </Link>
 
         {/* Botón para ir a la página de Pedidos */}
-        <Link href="/pedidos">
+        {/* <Link href="/pedidos">
           <button className="menu-btn">
             PEDIDOS
           </button>
-        </Link>
+        </Link> */}
 
         {/* Botón para ir a la página de Reservas */}
         <Link href="/reservas">
