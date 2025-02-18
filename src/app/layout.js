@@ -1,4 +1,5 @@
 import "./globals.css";
+import { MesaProvider } from "../app/(sections)/context/MesaContext";
 
 export const metadata = {
   title: "MENÚ DIGITAL",
@@ -9,7 +10,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+      <MesaProvider>
         {children}
+      </MesaProvider>
       </body>
     </html>
   );

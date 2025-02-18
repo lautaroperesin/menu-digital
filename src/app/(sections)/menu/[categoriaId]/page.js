@@ -2,28 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useMesaInfo } from "../../context/MesaContext"; 
 import ProductCard from "@/components/ProductCard/ProductCard";
 import OrderCart from "@/components/OrderCart/OrderCart";
 import CategoriesNavBar from "@/components/CategoriesNavBar/CategoriesNavBar";
 
 export default function CategoriaPage() {
-  const paramsPromise = useParams();
-  const categoriaId = paramsPromise.categoriaId;
-  const router = useRouter();
-  const { mesa } = router.query;
+  const params = useParams();
+  const { mesaId } = useMesaInfo();
+  const categoriaId = params.categoriaId;
 
   const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
   const [subcategoriaSeleccionada, setSubcategoriaSeleccionada] = useState(null);
-
-  if (mesa) {
-    // El usuario escaneó un QR y está en el restaurante
-    console.log(`El usuario está en la mesa: ${table}`);
-  } else {
-    // El usuario ingresó por otro medio (no está en el restaurante)
-    console.log('El usuario no está en el restaurante');
-  }
 
   // Obtener los productos por categoria
   useEffect(() => {
@@ -95,6 +86,16 @@ export default function CategoriaPage() {
   return (
     <div className="p-6">
       <CategoriesNavBar categoriaId={categoriaId} onSelectSubcategoria={setSubcategoriaSeleccionada} />
+
+      {mesaId ? (
+        <div className="bg-green-100 p-3 rounded mb-4">
+          Mesa #{mesaId} - Categoría: {categoriaId}
+        </div>
+      ) : (
+        <div className="bg-yellow-100 p-3 rounded mb-4">
+          Pedido para entrega - Categoría: {categoriaId}
+        </div>
+      )}
 
       {productos && Object.entries(
         productos.reduce((grupos, producto) => {
